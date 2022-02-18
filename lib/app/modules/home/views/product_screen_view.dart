@@ -3,14 +3,17 @@ import 'package:get/get.dart';
 import 'package:getx_shop_app/app/model/product_model.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 
-class ProductScreenWiev extends StatelessWidget {
+class ProductScreenWiev extends GetView<HomeController> {
+  // reciewe id- use it to find product with the same id in list of Products (dummyList)
   late String id = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
-    Product singleProduct =
-        Get.find<HomeController>().findSingleProductById(id);
-    String title = singleProduct.title ;
+    // if I use stateless widget without binding first must find controler like below 
+    // Product singleProduct =
+    //     Get.find<HomeController>().findSingleProductById(id);
+    Product singleProduct = controller.findSingleProductById(id);
+    String title = singleProduct.title;
     return Scaffold(
       appBar: AppBar(
         title: Text(id),

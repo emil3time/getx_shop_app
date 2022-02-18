@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Product {
   String id;
@@ -6,13 +7,16 @@ class Product {
   String description;
   String imageUrl;
   double price;
-  bool isFavorite;
+  RxBool isFavorite = false.obs;
 
-  Product(
-      {required this.description,
-      required this.id,
-      required this.title,
-      required this.imageUrl,
-      required this.price,
-      this.isFavorite = false});
+  Product({
+    required this.description,
+    required this.id,
+    required this.title,
+    required this.imageUrl,
+    required this.price,
+  });
+  void toggleIsFavorite() {
+    isFavorite.value = !isFavorite.value;
+  }
 }

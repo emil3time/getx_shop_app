@@ -3,6 +3,9 @@ import 'package:getx_shop_app/app/model/product_model.dart';
 
 class HomeController extends GetxController {
 
+
+  
+
   RxList<Product> _dummyList = <Product>[
     Product(
       id: 'p1',

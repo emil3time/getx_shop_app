@@ -12,7 +12,7 @@ class HomeScreenView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    // List<Product> dummyList = controller.dummyList;
+    
     return Scaffold(
       backgroundColor: Colors.amber,
       appBar: AppBar(
