@@ -19,5 +19,14 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  fonts:
+    - family: Comfortaa
+      fonts:
+        - asset: assets\Comfortaa-VariableFont_wght.ttf
+
+    - family: Shizuru
+      fonts:
+        - asset: assets\Shizuru-Regular.ttf
+
   uses-material-design: true
 
