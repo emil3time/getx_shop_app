@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import 'package:getx_shop_app/app/modules/home/views/product_screen_view.dart';
 
 import '../model/product_model.dart';
 
-class ProductSimpleTile extends StatelessWidget {
+class ProductSimpleTile extends GetView<HomeController> {
   /* String imageUrl;
   String title;
   String id;
@@ -66,10 +67,10 @@ class ProductSimpleTile extends StatelessWidget {
               leading: Obx(() {
                 // print('product isfvorite ${product.isFavorite.value}');
                 return IconButton(
-                  icon: product.isFavorite.value
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
-                  color: Colors.cyan.shade300,
+                  icon:
+                       Icon(Icons.favorite),
+
+                  color: product.isFavorite.value ? Colors.red : Colors.white,
                   onPressed: () {
                     product.toggleIsFavorite();
                   },
@@ -83,10 +84,17 @@ class ProductSimpleTile extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontFamily: ''),
                 ),
               ),
-              trailing: IconButton(
-                icon: Icon(Icons.shopping_cart),
-                color: Colors.cyan.shade300,
-                onPressed: () {},
+              trailing: Obx(
+                (() => IconButton(
+                      icon: Icon(Icons.shopping_cart),
+                      color: controller.cartMap.containsKey(product.id)
+                          ? Colors.green
+                          : Colors.white,
+                      onPressed: () {
+                        controller.addCartItem(
+                            product.id, product.price, product.title,product.imageUrl);
+                      },
+                    )),
               ),
             ),
           ),
