@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
+import 'package:getx_shop_app/app/modules/home/views/order_screen_view.dart';
 
-import '../../../widgets/cart_products_list_view.dart';
+import '../../../widgets/cart_products_list.dart';
 
 class CartScreenView extends GetView<HomeController> {
   @override
@@ -33,24 +34,30 @@ class CartScreenView extends GetView<HomeController> {
                       ),
                     ),
                     Chip(
-                      backgroundColor: Colors.green,
-                      avatar: CircleAvatar(
-                        backgroundColor: Colors.white.withOpacity(0.3),
-                        child: Text(
-                          'ZŁ',
-                          style: TextStyle(color: Colors.white),
+                        backgroundColor: Colors.green,
+                        avatar: CircleAvatar(
+                          backgroundColor: Colors.white.withOpacity(0.3),
+                          child: Text(
+                            'ZŁ',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                      label:Obx(()=> Text(
-                        controller.totalAmt.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                        ),
-                      ), )
-                    ),
+                        label: Obx(
+                          () => Text(
+                            controller.totalAmt.toStringAsFixed(2),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                            ),
+                          ),
+                        )),
                     TextButton(
-                      onPressed: (){ },
+                      onPressed: () {
+                        controller.addOrders(controller.cartMap.values.toList(),
+                            controller.totalAmt);
+                        controller.removeAllCartItems();
+
+                      },
                       child: Text(
                         'Order now',
                         style: TextStyle(
@@ -61,14 +68,13 @@ class CartScreenView extends GetView<HomeController> {
                     )
                   ],
                 ),
-
-            ),
+              ),
             ),
           ),
-        SizedBox(
-          height: 50,
-        ),
-        CartProductsListView(),
+          SizedBox(
+            height: 50,
+          ),
+          CartProductsList(),
         ],
       ),
     );

@@ -7,21 +7,28 @@ import '../model/product_model.dart';
 
 class CartProductCard extends GetView<HomeController> {
   CartItem cartItem;
+  String productId;
   CartProductCard({
     required this.cartItem,
+    required this.productId,
   });
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       background: Container(
+        alignment: Alignment.centerRight,
         color: Colors.red,
+        child: Icon(
+          Icons.delete_forever,
+          size: 50,
+        ),
       ),
       key: ValueKey(cartItem.id),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        controller.remoweCartItem(
-            quantity: cartItem.quantity.value, imageUrl: cartItem.imageUrl);
+        controller.removeCartItem(
+            quantity: cartItem.quantity.value, productId: productId);
       },
       child: Card(
         elevation: 6,
@@ -68,7 +75,8 @@ class CartProductCard extends GetView<HomeController> {
               ),
               SizedBox(
                 width: 60,
-                child: Text('${cartItem.quantity * cartItem.price}'),
+                child: Text(
+                    '${(cartItem.quantity * cartItem.price).toStringAsFixed(2)}'),
               )
             ],
           ),

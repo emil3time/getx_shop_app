@@ -5,7 +5,7 @@ import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart'
 import '../model/product_model.dart';
 import './product_simple_tile.dart';
 
-class ProductsGridView extends GetView<HomeController> {
+class ProductsGrid extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     // if use stateless Widget first must find controller

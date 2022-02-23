@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/model/cart_item_model.dart';
+import 'package:getx_shop_app/app/model/order_model.dart';
 import 'package:getx_shop_app/app/model/product_model.dart';
 
 class HomeController extends GetxController {
@@ -115,17 +117,30 @@ class HomeController extends GetxController {
     return total;
   } */
 
-  void remoweCartItem( { required String imageUrl, required int quantity}) {
+  // remowe by compare key to productId (productId is both key and product id)
+  void removeCartItem({required String productId, required int quantity}) {
+    _cartMap.remove(productId);
+    _cartCounter - quantity;
+  }
+
+  // alternative way - remove by compare ulr
+  void removeCartItem2({required String imageUrl, required int quantity}) {
     _cartMap.removeWhere((key, value) => value.imageUrl == imageUrl);
 
     _cartCounter - quantity;
+  }
+
+  void removeAllCartItems() {
+    _cartMap.value = {};
+    _cartCounter.value = 0;
+    print(_orders);
   }
 
   /////
   void addCartItem(
       String productId, double price, String title, String imageUrl) {
     if (_cartMap.containsKey(productId)) {
-      cartMap.update(productId, (existingCartItem) {
+      _cartMap.update(productId, (existingCartItem) {
         return CartItem(
           id: existingCartItem.id,
           itemName: existingCartItem.itemName,
@@ -152,13 +167,60 @@ class HomeController extends GetxController {
     _cartCounter++;
   }
 
-  // void getQuantity(String productId) {
-  //   var qqq = 0;
-  //   if (_cartMap.containsKey(productId)) {
-  //     _cartMap.forEach((key, CartItem) {
-  //       qqq = CartItem.quantity.value;
-  //     });
-  //   }
-  //   print(qqq);
-  // }
+  /////////////////////////////////////////////////////////////////
+  /// Order logic
+  ///
+  ///
+  ///
+
+  RxList<OrderItem> _orders = <OrderItem>[].obs;
+
+  List<OrderItem> get orders {
+    return [..._orders];
+  }
+
+  void addOrders(List<CartItem> cartItems, double totalAmount) {
+    if (totalAmount == 0) {
+      null;
+    } else {
+      _orders.insert(
+          0,
+          OrderItem(
+              amount: totalAmt,
+              dateTime: DateTime.now(),
+              id: DateTime.now().toString(),
+              orderProducts: cartItems));
+    }
+  }
+
+
+
+  List<Widget> createCartProducts(OrderItem orderItem) {
+    return orderItem.orderProducts
+        .map((e) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Text(
+                    e.itemName,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Spacer(),
+                  Text(
+                    '${e.quantity.value.toString()} x ${e.price.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ))
+        .toList();
+  }
+
+  /* bool showDetalis = true; */
+
+  void togleShowDetails(OrderItem orderItem) {
+    orderItem.detailsShown = !orderItem.detailsShown;
+    update();
+    /* print(detailedShown); */
+  }
 }
