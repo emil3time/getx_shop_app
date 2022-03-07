@@ -67,9 +67,7 @@ class ProductSimpleTile extends GetView<HomeController> {
               leading: Obx(() {
                 // print('product isfvorite ${product.isFavorite.value}');
                 return IconButton(
-                  icon:
-                       Icon(Icons.favorite),
-
+                  icon: Icon(Icons.favorite),
                   color: product.isFavorite.value ? Colors.red : Colors.white,
                   onPressed: () {
                     product.toggleIsFavorite();
@@ -91,8 +89,15 @@ class ProductSimpleTile extends GetView<HomeController> {
                           ? Colors.green
                           : Colors.white,
                       onPressed: () {
-                        controller.addCartItem(
-                            product.id, product.price, product.title,product.imageUrl);
+                        controller.addCartItem(product.id, product.price,
+                            product.title, product.imageUrl);
+
+                            Get.back();
+
+                        Get.snackbar('Cart info', 'added a product to the cart',
+                            icon: Icon(Icons.add_shopping_cart),
+                            snackPosition: SnackPosition.BOTTOM,
+                            duration: Duration(seconds: 1));
                       },
                     )),
               ),

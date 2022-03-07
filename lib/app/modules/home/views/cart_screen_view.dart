@@ -55,8 +55,10 @@ class CartScreenView extends GetView<HomeController> {
                       onPressed: () {
                         controller.addOrders(controller.cartMap.values.toList(),
                             controller.totalAmt);
-                        controller.removeAllCartItems();
+                        
+                        controller.showAddOrderSnackBar();
 
+                        controller.removeAllCartItems();
                       },
                       child: Text(
                         'Order now',

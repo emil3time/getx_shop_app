@@ -136,6 +136,23 @@ class HomeController extends GetxController {
     print(_orders);
   }
 
+  void showAddOrderSnackBar() {
+    if (totalAmt != 0)
+
+      Get.snackbar(
+        'Order info',
+        'a new order has been added',
+
+        icon: Icon(
+          Icons.send_and_archive,
+        ),
+        duration: Duration(
+          seconds: 1,
+        ),
+      
+      );
+  }
+
   /////
   void addCartItem(
       String productId, double price, String title, String imageUrl) {
@@ -192,8 +209,6 @@ class HomeController extends GetxController {
               orderProducts: cartItems));
     }
   }
-
-
 
   List<Widget> createCartProducts(OrderItem orderItem) {
     return orderItem.orderProducts

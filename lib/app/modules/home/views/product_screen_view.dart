@@ -9,18 +9,61 @@ class ProductScreenWiev extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    // if I use stateless widget without binding first must find controler like below 
+    // if I use stateless widget without binding first must find controler like below
     // Product singleProduct =
     //     Get.find<HomeController>().findSingleProductById(id);
     Product singleProduct = controller.findSingleProductById(id);
     String title = singleProduct.title;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(id),
-      ),
-      body: Center(
-        child: Text(' $title screen view works really well!'),
-      ),
-    );
+        appBar: AppBar(
+          title: Text(id),
+        ),
+        body: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 300,
+                  width: 220,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Image.network(
+                      singleProduct.imageUrl,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Wrap(
+                  direction: Axis.vertical,
+                  children: [
+                    Text(
+                      singleProduct.title,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Comfortaa',
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      singleProduct.price.toString(),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Comfortaa',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Expanded(
+              child: Text(singleProduct.description),
+            ),
+          ],
+        ));
   }
 }

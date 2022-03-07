@@ -26,6 +26,31 @@ class CartProductCard extends GetView<HomeController> {
       ),
       key: ValueKey(cartItem.id),
       direction: DismissDirection.endToStart,
+       confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: Text('Are you sure?'),
+                content: Text(
+                  'Do you want to remove the item from the cart?',
+                ),
+                actions: <Widget>[
+                  MaterialButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Get.back(result: false);
+                    },
+                  ),
+                  MaterialButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Get.back(result: true);
+                    },
+                  ),
+                ],
+              ),
+        );
+      },
       onDismissed: (direction) {
         controller.removeCartItem(
             quantity: cartItem.quantity.value, productId: productId);
