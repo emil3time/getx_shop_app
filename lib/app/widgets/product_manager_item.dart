@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:getx_shop_app/app/model/product_model.dart';
+import 'package:get/get.dart';
 
 class ProductManagerItem extends StatelessWidget {
   Product productData;
   ProductManagerItem({
     required this.productData,
   });
+
+   final priceFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,8 @@ class ProductManagerItem extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            Wrap(direction:Axis.vertical ,
+            Wrap(
+              direction: Axis.vertical,
               children: [
                 Text('${productData.title}  '),
                 Text('price:${productData.price}'),
@@ -54,12 +58,22 @@ class ProductManagerItem extends StatelessWidget {
             ),
             Spacer(),
             IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.edit),
+              onPressed: () {
+               
+              },
+              icon: Icon(
+                Icons.edit,
+                size: 30,
+                color: Colors.black54,
+              ),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.delete_forever),
+              icon: Icon(
+                Icons.delete_forever,
+                size: 30,
+                color: Colors.black54,
+              ),
             ),
           ],
         ),

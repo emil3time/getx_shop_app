@@ -6,7 +6,7 @@ import 'package:getx_shop_app/app/model/order_model.dart';
 import 'package:getx_shop_app/app/model/product_model.dart';
 
 class HomeController extends GetxController {
-  RxList<Product> _dummyList = <Product>[
+  RxList<Product> dummyList = <Product>[
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -57,13 +57,13 @@ class HomeController extends GetxController {
 
   // List of Products marked as favorite
   List<Product> get onlyFavoriteList {
-    return _dummyList.where((e) => e.isFavorite.value).toList();
+    return dummyList.where((e) => e.isFavorite.value).toList();
   }
 
   // create get to chandle private class
-  List<Product> get dummyList {
+/*   List<Product> get dummyList {
     return [..._dummyList];
-  }
+  } */
 
 // choose between the favorites list and the all list
   List<Product> get favoriteOrAll {
@@ -77,7 +77,7 @@ class HomeController extends GetxController {
 // firstWhere list method return first element where condition == true
 //
   Product findSingleProductById(String id) {
-    return _dummyList.firstWhere((e) => e.id == id);
+    return dummyList.firstWhere((e) => e.id == id);
   }
 
 // Cart loigic
@@ -138,18 +138,15 @@ class HomeController extends GetxController {
 
   void showAddOrderSnackBar() {
     if (totalAmt != 0)
-
       Get.snackbar(
         'Order info',
         'a new order has been added',
-
         icon: Icon(
           Icons.send_and_archive,
         ),
         duration: Duration(
           seconds: 1,
         ),
-      
       );
   }
 
@@ -237,5 +234,15 @@ class HomeController extends GetxController {
     orderItem.detailsShown = !orderItem.detailsShown;
     update();
     /* print(detailedShown); */
+  }
+
+  ///////
+  ///
+  ///
+  ///
+  //
+  addNewProduct() {
+
+
   }
 }
