@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import 'package:getx_shop_app/app/modules/home/views/product_screen_view.dart';
 
 import '../model/product_model.dart';
 
 class ProductSimpleTile extends GetView<HomeController> {
-  /* String imageUrl;
-  String title;
-  String id;
-  double price; */
+  var cartController = Get.find<CartController>();
+  
 
   Product product;
   ProductSimpleTile(
       {
-      /* required this.imageUrl,
-    required this.title,
-    required this.id,
-    required this.price, */
 
       required this.product});
 
@@ -85,14 +80,14 @@ class ProductSimpleTile extends GetView<HomeController> {
               trailing: Obx(
                 (() => IconButton(
                       icon: Icon(Icons.shopping_cart),
-                      color: controller.cartMap.containsKey(product.id)
+                      color: cartController.cartMap.containsKey(product.id)
                           ? Colors.green
                           : Colors.white,
                       onPressed: () {
-                        controller.addCartItem(product.id, product.price,
+                        cartController.addCartItem(product.id ?? '', product.price,
                             product.title, product.imageUrl);
 
-                            Get.back();
+                        Get.back();
 
                         Get.snackbar('Cart info', 'added a product to the cart',
                             icon: Icon(Icons.add_shopping_cart),

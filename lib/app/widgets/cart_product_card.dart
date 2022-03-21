@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/model/cart_item_model.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 
 import '../model/product_model.dart';
 
-class CartProductCard extends GetView<HomeController> {
+class CartProductCard extends GetView<CartController> {
   CartItem cartItem;
   String productId;
   CartProductCard({

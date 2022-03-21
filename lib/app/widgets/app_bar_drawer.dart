@@ -1,11 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
-import 'package:getx_shop_app/app/modules/home/views/home_screen_view.dart';
 import 'package:getx_shop_app/app/modules/home/views/order_screen_view.dart';
 import 'package:getx_shop_app/app/modules/home/views/product_manager_screen_view.dart';
+
+import 'drawer_widgets.dart';
 
 class AppBarDrawer extends GetView<HomeController> {
   @override
@@ -18,85 +17,30 @@ class AppBarDrawer extends GetView<HomeController> {
             AppBar(
               backgroundColor: Colors.black12,
               title: Text(
-                'Orders',
+                'Menu',
                 style: TextStyle(fontFamily: 'Comfortaa', fontSize: 22),
               ),
             ),
             SizedBox(
               height: 30,
             ),
-            ListTile(
-              leading: Icon(
-                Icons.shop_2,
-                color: Colors.white,
-                size: 30,
-              ),
-              title: Text(
-                'Continue shoping',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Comfortaa',
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {
-                Get.back();
-              },
+            DrawerItem(
+              icon: Icons.shop_two_outlined,
+              title: 'Continue shoping',
+              goTo: () => Get.back(),
             ),
-            Divider(
-              color: Colors.white24,
-              thickness: 3,
-              endIndent: 30,
-              height: 1,
+            DrawerDivider(),
+            DrawerItem(icon: Icons.send_outlined,
+              title: 'Orders',
+              goTo: () => Get.to(OrderScreenView()),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.send,
-                color: Colors.white,
-                size: 30,
-              ),
-              title: Text(
-                'Orders',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Comfortaa',
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {
-                Get.to(OrderScreenView());
-              },
+            DrawerDivider(),
+            DrawerItem(
+              icon: Icons.manage_accounts_outlined,
+              title: 'Product manager',
+              goTo: () => Get.to(ProductManagerScreenView()),
             ),
-            Divider(
-              color: Colors.white24,
-              thickness: 3,
-              endIndent: 30,
-              height: 1,
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.manage_accounts,
-                color: Colors.white,
-                size: 30,
-              ),
-              title: Text(
-                'Product manager',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Comfortaa',
-                  color: Colors.white,
-                ),
-              ),
-              onTap: () {
-                Get.to(ProductManagerScreenView());
-              },
-            ),
-            Divider(
-              color: Colors.white24,
-              thickness: 3,
-              endIndent: 30,
-              height: 1,
-            ),
+            DrawerDivider(),
           ],
         ),
       ),

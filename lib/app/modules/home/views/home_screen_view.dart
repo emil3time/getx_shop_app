@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:getx_shop_app/app/model/product_model.dart';
+
+import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/widgets/app_bar_cart.dart';
 import 'package:getx_shop_app/app/widgets/app_bar_drawer.dart';
-import 'package:getx_shop_app/app/widgets/product_simple_tile.dart';
 
 import '../../../widgets/products_grid.dart';
 import '../controllers/home_controller.dart';
@@ -12,6 +12,9 @@ import '../controllers/home_controller.dart';
 enum FilterSwitch { all, favorite }
 
 class HomeScreenView extends GetView<HomeController> {
+  final cartController = Get.put<CartController>(CartController());
+  // final controller = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,13 +43,10 @@ class HomeScreenView extends GetView<HomeController> {
           ),
           Obx(
             () => AppBarCart(
-
               cartIcon: Icon(
                 Icons.shopping_cart,
               ),
-              cartCounter: controller.cartCounter,
-
-
+              cartCounter: cartController.cartCounter,
             ),
           )
         ],

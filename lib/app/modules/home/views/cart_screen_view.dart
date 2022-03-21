@@ -3,12 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/order_controller.dart';
 import 'package:getx_shop_app/app/modules/home/views/order_screen_view.dart';
 
 import '../../../widgets/cart_products_list.dart';
 
-class CartScreenView extends GetView<HomeController> {
+class CartScreenView extends GetView<CartController> {
+  var orderController = Get.put<OrderController>(OrderController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +57,9 @@ class CartScreenView extends GetView<HomeController> {
                         )),
                     TextButton(
                       onPressed: () {
-                        controller.addOrders(controller.cartMap.values.toList(),
+                        orderController.addOrders(controller.cartMap.values.toList(),
                             controller.totalAmt);
-                        
+
                         controller.showAddOrderSnackBar();
 
                         controller.removeAllCartItems();

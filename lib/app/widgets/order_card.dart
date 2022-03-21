@@ -3,11 +3,12 @@ import 'dart:math';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/model/order_model.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/order_controller.dart';
 import 'package:getx_shop_app/app/widgets/order_card_details.dart';
 import 'package:intl/intl.dart';
 
-class OrderCard extends GetView<HomeController> {
-  OrderItem orderItem;
+class OrderCard extends GetView<OrderController> {
+  final OrderItem orderItem;
   OrderCard({required this.orderItem});
 
   @override
@@ -42,7 +43,7 @@ class OrderCard extends GetView<HomeController> {
               },
             ),
           ),
-          GetBuilder<HomeController>(
+          GetBuilder<OrderController>(
             /* init: controller, */
             builder: (contr) {
               if (orderItem.detailsShown) {

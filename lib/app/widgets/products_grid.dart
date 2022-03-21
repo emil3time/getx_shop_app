@@ -9,7 +9,7 @@ class ProductsGrid extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     // if use stateless Widget first must find controller
-    // var controller = Get.find<HomeController>();
+    // var controller = Get.put<HomeController>(HomeController());
 
     return Obx(
       () => GridView.builder(
