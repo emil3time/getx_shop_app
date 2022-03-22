@@ -39,9 +39,9 @@ class ManagerController extends GetxController {
 
     formKey.currentState!.save();
 
-    homeController.dummyList.forEach((element) {
+    /* homeController.dummyList.forEach((element) {
       print('${element.id} : ${newProduct.id}');
-    });
+    }); */
     if (homeController.dummyList.any((element) => element.id == newProduct.id)) {
       var indexUpdatedProduct =
           homeController.dummyList.indexWhere((element) => element.id == newProduct.id);
@@ -55,10 +55,16 @@ class ManagerController extends GetxController {
   }
 
   validateFormKey(String value) {
-    if (value == null || value.isEmpty) {
+    if ( value.isEmpty) {
       return Text('This field is mandatory');
     }
     return null;
+  }
+
+  deleteProduct(String id){
+      var indexUpdatedProduct =
+          homeController.dummyList.indexWhere((element) => element.id == id);
+      homeController.dummyList.removeAt(indexUpdatedProduct);
   }
 
   var newProduct = Product(
@@ -67,6 +73,7 @@ class ManagerController extends GetxController {
     title: '',
     imageUrl: '',
     price: 0.0,
+
   );
 
   /*  var initialValues =

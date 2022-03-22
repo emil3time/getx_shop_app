@@ -26,7 +26,7 @@ class ProductManagerScreenView extends StatelessWidget {
           IconButton(
             onPressed: () {
               Get.defaultDialog(
-                  title: 'Add new product', content: AddEditProductDialog());
+                  title: 'Add new product', content: AddEditProductDialog(existingProduct: controller.newProduct,));
             },
             icon: Icon(
               Icons.add,

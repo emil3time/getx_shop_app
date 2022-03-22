@@ -7,11 +7,13 @@ import '../modules/home/controllers/manager_controller.dart';
 import 'custom_input_decoration.dart';
 
 class AddEditProductDialog extends GetView<ManagerController> {
-
   @override
+  AddEditProductDialog({required this.existingProduct});
+  Product existingProduct;
+
   Widget build(BuildContext context) {
     return Form(
-      key:controller.formKey,
+      key: controller.formKey,
       child: Container(
         padding: EdgeInsets.all(8.0),
         height: 380,
@@ -23,7 +25,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                 height: 5,
               ),
               TextFormField(
-                initialValue: controller.newProduct.title,
+                initialValue: existingProduct.title,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'This field is mandatory';
@@ -31,12 +33,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                   return null;
                 },
                 onSaved: (newValue) {
-                  controller.newProduct = Product(
-                      id: controller.newProduct.id,
-                      title: newValue!,
-                      description: controller.newProduct.description,
-                      imageUrl: controller.newProduct.imageUrl,
-                      price: controller.newProduct.price);
+                  existingProduct.title = newValue!;
                 },
                 decoration: customInputDecoration('title'),
                 textInputAction: TextInputAction.next,
@@ -45,7 +42,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                 height: 5,
               ),
               TextFormField(
-                initialValue: controller.newProduct.price.toString(),
+                initialValue: existingProduct.price.toString(),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'This field is mandatory';
@@ -59,12 +56,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                   return null;
                 },
                 onSaved: (newValue) {
-                  controller.newProduct = Product(
-                      description: controller.newProduct.title,
-                      id: controller.newProduct.id,
-                      title: controller.newProduct.title,
-                      imageUrl: controller.newProduct.imageUrl,
-                      price: double.parse(newValue!));
+                  existingProduct.price = double.parse(newValue!);
                 },
                 decoration: customInputDecoration('price'),
                 textInputAction: TextInputAction.next,
@@ -74,7 +66,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                 height: 5,
               ),
               TextFormField(
-                initialValue: controller.newProduct.description,
+                initialValue: existingProduct.description,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'This field is mandatory';
@@ -89,12 +81,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                   return null;
                 },
                 onSaved: (newValue) {
-                  controller.newProduct = Product(
-                      id: controller.newProduct.id,
-                      title: controller.newProduct.title,
-                      description: newValue!,
-                      imageUrl: controller.newProduct.imageUrl,
-                      price: controller.newProduct.price);
+                  existingProduct.description = newValue!;
                 },
                 decoration: customInputDecoration('description'),
                 maxLines: 3,
@@ -129,6 +116,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                   ),
                   Expanded(
                     child: TextFormField(
+                      /* initialValue: productWithFavorite.imageUrl, */
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'This field is mandatory';
@@ -151,12 +139,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                         return null;
                       },
                       onSaved: (newValue) {
-                        controller.newProduct = Product(
-                            id: controller.newProduct.id,
-                            description: controller.newProduct.description,
-                            title: controller.newProduct.title,
-                            imageUrl: newValue!,
-                            price: controller.newProduct.price);
+                        existingProduct.imageUrl = newValue!;
                       },
                       decoration: customInputDecoration('image URL'),
                       textInputAction: TextInputAction.done,
@@ -192,6 +175,9 @@ class AddEditProductDialog extends GetView<ManagerController> {
                   IconButton(
                       padding: EdgeInsets.only(right: 35),
                       onPressed: () {
+                        controller.newProduct = existingProduct;
+                        print(
+                            'before saved ${controller.newProduct.isFavorite}');
                         controller.saveFormKey();
                         controller.clearInitialValue();
                       },
@@ -211,6 +197,4 @@ class AddEditProductDialog extends GetView<ManagerController> {
       ),
     );
   }
-
-
 }

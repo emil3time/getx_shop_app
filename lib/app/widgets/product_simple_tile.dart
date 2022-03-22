@@ -8,7 +8,7 @@ import '../model/product_model.dart';
 
 class ProductSimpleTile extends GetView<HomeController> {
   var cartController = Get.find<CartController>();
-  
+
 
   Product product;
   ProductSimpleTile(
@@ -59,16 +59,17 @@ class ProductSimpleTile extends GetView<HomeController> {
                 )),
             footer: GridTileBar(
               backgroundColor: Colors.black54,
-              leading: Obx(() {
+              leading: Obx((() =>
                 // print('product isfvorite ${product.isFavorite.value}');
-                return IconButton(
+
+                 IconButton(
                   icon: Icon(Icons.favorite),
                   color: product.isFavorite.value ? Colors.red : Colors.white,
                   onPressed: () {
                     product.toggleIsFavorite();
                   },
-                );
-              }),
+                )
+              ),),
               title: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(

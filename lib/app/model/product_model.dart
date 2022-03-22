@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Product {
@@ -11,7 +10,7 @@ class Product {
 
   Product({
     required this.description,
-     this.id,
+    this.id,
     required this.title,
     required this.imageUrl,
     required this.price,

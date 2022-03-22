@@ -19,56 +19,59 @@ class ProductManagerItem extends GetView<ManagerController> {
   @override
   Widget build(BuildContext context) {
     return CustomManagerContainer(
-        child: ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: Row(
-        children: [
-          SizedBox(
-            height: 100,
-            width: 60,
-            child: Image.network(
-              productData.imageUrl,
-              fit: BoxFit.scaleDown,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Row(
+          children: [
+            SizedBox(
+              height: 100,
+              width: 60,
+              child: Image.network(
+                productData.imageUrl,
+                fit: BoxFit.scaleDown,
+              ),
             ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Wrap(
-            direction: Axis.vertical,
-            children: [
-              Text('${productData.title}  '),
-              Text('price:${productData.price}'),
-            ],
-          ),
-          Spacer(),
-          IconButton(
-            onPressed: () {
-              controller.editProduct(productData);
-              Get.defaultDialog(
-                  barrierDismissible: false,
-                  buttonColor: Colors.red,
-                  title: 'Edit product',
-                  content: AddEditProductDialog());
-            },
-            icon: Icon(
-              Icons.edit,
-              size: 30,
-              color: Colors.black54,
+            SizedBox(
+              width: 10,
             ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.delete_forever,
-              size: 30,
-              color: Colors.black54,
+            Wrap(
+              direction: Axis.vertical,
+              children: [
+                Text('${productData.title}  '),
+                Text('price:${productData.price}'),
+              ],
             ),
-          ),
-        ],
+            Spacer(),
+            IconButton(
+              onPressed: () {
+                controller.imageUrlController.text = productData.imageUrl;
+                Get.defaultDialog(
+                    barrierDismissible: false,
+                    buttonColor: Colors.red,
+                    title: 'Edit product',
+                    content: AddEditProductDialog(
+                      existingProduct: productData,
+                    ));
+              },
+              icon: Icon(
+                Icons.edit,
+                size: 30,
+                color: Colors.black54,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                controller.deleteProduct(productData.id!);
+              },
+              icon: Icon(
+                Icons.delete_forever,
+                size: 30,
+                color: Colors.black54,
+              ),
+            ),
+          ],
+        ),
       ),
-    ),);
+    );
   }
 }
-
-
