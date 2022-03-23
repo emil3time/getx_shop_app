@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/state_manager.dart';
+import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import '../../../model/product_model.dart';
 
@@ -30,8 +33,62 @@ class ManagerController extends GetxController {
   /// add edit product
   ///
   var formKey = GlobalKey<FormState>();
+  // post probuct
+  Future<dynamic> httpPostProduct() async {
+    final url = Uri.parse(
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabas');
+    final response = await http
+        .post(url,
+            body: json.encode({
+              'title': newProduct.title,
+              'price': newProduct.price.toString(),
+              'description': newProduct.description,
+              'imageUrl': newProduct.imageUrl,
+              'isFavorite': newProduct.isFavorite.value,
+            }))
+        .catchError((onError) {
+      throw onError;
+    });
+    return response;
+  }
 
-  saveFormKey() {
+  //fetch product
+ httpFetchProduct() {
+
+
+
+
+  }
+
+
+  // Progress Indicator
+  var isLoading = false.obs;
+  toogleIsLoading() {
+    isLoading.value = !isLoading.value;
+  }
+
+  showCustomErrorDialog() {
+    Future.delayed(Duration(milliseconds: 600)).then((_) => Get.defaultDialog(
+            actions: <Widget>[
+              MaterialButton(
+                onPressed: (() => Get.back()),
+                child: Text('ok'),
+                color: Colors.blue.shade100,
+              )
+            ],
+            barrierDismissible: false,
+            title: 'Error',
+            content: Container(
+              height: 200,
+              width: 300,
+              child: Center(
+                  child: Text(
+                      'There is a problem with the connection - try again later  ')),
+            )));
+  }
+
+// add / update product
+  Future<dynamic> addEditProduct() async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -39,32 +96,50 @@ class ManagerController extends GetxController {
 
     formKey.currentState!.save();
 
-    /* homeController.dummyList.forEach((element) {
-      print('${element.id} : ${newProduct.id}');
-    }); */
-    if (homeController.dummyList.any((element) => element.id == newProduct.id)) {
-      var indexUpdatedProduct =
-          homeController.dummyList.indexWhere((element) => element.id == newProduct.id);
-      homeController.dummyList[indexUpdatedProduct] = newProduct;
-    } else {
-      newProduct.id = DateTime.now().toString();
-      homeController.dummyList.add(newProduct);
+    toogleIsLoading();
+
+    try {
+      var response = await httpPostProduct();
+
+      //update existing product
+      if (homeController.dummyList
+          .any((element) => element.id == newProduct.id)) {
+        var indexUpdatedProduct = homeController.dummyList
+            .indexWhere((element) => element.id == newProduct.id);
+
+        homeController.dummyList[indexUpdatedProduct] = newProduct;
+      } else {
+        /// add new product
+        newProduct.id = await json.decode(response.body)['name'];
+
+        homeController.dummyList.add(newProduct);
+      }
+    } catch (error) {
+      toogleIsLoading();
+      showCustomErrorDialog();
+      toogleIsLoading();
+    } finally {
+      toogleIsLoading();
+
+      Get.back();
+
+      clearInitialValue();
     }
-    Get.back();
-    clearInitialValue();
   }
 
+  // Validation
   validateFormKey(String value) {
-    if ( value.isEmpty) {
+    if (value.isEmpty) {
       return Text('This field is mandatory');
     }
     return null;
   }
 
-  deleteProduct(String id){
-      var indexUpdatedProduct =
-          homeController.dummyList.indexWhere((element) => element.id == id);
-      homeController.dummyList.removeAt(indexUpdatedProduct);
+// delete product
+  deleteProduct(String id) {
+    var indexUpdatedProduct =
+        homeController.dummyList.indexWhere((element) => element.id == id);
+    homeController.dummyList.removeAt(indexUpdatedProduct);
   }
 
   var newProduct = Product(
@@ -73,7 +148,6 @@ class ManagerController extends GetxController {
     title: '',
     imageUrl: '',
     price: 0.0,
-
   );
 
   /*  var initialValues =
