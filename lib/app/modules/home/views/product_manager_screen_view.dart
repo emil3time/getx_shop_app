@@ -35,17 +35,20 @@ class ProductManagerScreenView extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          child: Obx(() => ListView.builder(
-                itemCount: homeController.dummyList.length,
-                itemBuilder: (_, i) => ProductManagerItem(
-                  productData: homeController.dummyList[i],
-                ),
-              )),
+      body: RefreshIndicator(
+        onRefresh: () => controller.httpFetchProduct(),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: Obx(() => ListView.builder(
+                  itemCount: homeController.dummyList.length,
+                  itemBuilder: (_, i) => ProductManagerItem(
+                    productData: homeController.dummyList[i],
+                  ),
+                )),
+          ),
         ),
       ),
     );

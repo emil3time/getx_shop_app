@@ -36,7 +36,7 @@ class ManagerController extends GetxController {
   // post probuct
   Future<dynamic> httpPostProduct() async {
     final url = Uri.parse(
-        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabas');
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json');
     final response = await http
         .post(url,
             body: json.encode({
@@ -53,13 +53,51 @@ class ManagerController extends GetxController {
   }
 
   //fetch product
- httpFetchProduct() {
-
-
-
-
+  Future<void> httpFetchProduct() async {
+    final url = Uri.parse(
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json');
+    final dataBase = await http.get(url);
+    print(dataBase.body.toString());
+    List<Product> decodedProducts = [];
+    final decodedData = json.decode(dataBase.body) as Map<String, dynamic>;
+    decodedData.forEach((prodId, prodValue) {
+      final decodedId = prodId.toString();
+      final decodedProduct = Product(
+        id: decodedId,
+        description: prodValue['description'],
+        title: prodValue['title'],
+        imageUrl: prodValue['imageUrl'],
+        price: double.parse(prodValue['price']),
+      );
+      decodedProducts.add(decodedProduct);
+      // homeController.dummyList.add(decodedProduct);
+    });
+    homeController.dummyList.value = decodedProducts;
   }
 
+  // update product on database
+
+  Future<void> httpUpdate() async {
+    // if (homeController.dummyList
+    //     .any((element) => element.id == newProduct.id)) {
+    //   var indexUpdatedProduct = homeController.dummyList
+    //       .indexWhere((element) => element.id == newProduct.id);
+
+    final url = Uri.parse(
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/${newProduct.id}.json');
+    await http.patch(url,
+        body: json.encode({
+          'title': newProduct.title,
+          'price': newProduct.price.toString(),
+          'description': newProduct.description,
+          'imageUrl': newProduct.imageUrl,
+          'isFavorite': newProduct.isFavorite.value,
+        }));
+
+    //   homeController.dummyList[indexUpdatedProduct] = newProduct;
+
+    // }
+  }
 
   // Progress Indicator
   var isLoading = false.obs;
@@ -99,7 +137,7 @@ class ManagerController extends GetxController {
     toogleIsLoading();
 
     try {
-      var response = await httpPostProduct();
+
 
       //update existing product
       if (homeController.dummyList
@@ -107,9 +145,12 @@ class ManagerController extends GetxController {
         var indexUpdatedProduct = homeController.dummyList
             .indexWhere((element) => element.id == newProduct.id);
 
+       await httpUpdate();
+
         homeController.dummyList[indexUpdatedProduct] = newProduct;
       } else {
         /// add new product
+        var response = await httpPostProduct();
         newProduct.id = await json.decode(response.body)['name'];
 
         homeController.dummyList.add(newProduct);
@@ -121,9 +162,9 @@ class ManagerController extends GetxController {
     } finally {
       toogleIsLoading();
 
-      Get.back();
-
       clearInitialValue();
+
+      Get.back();
     }
   }
 
