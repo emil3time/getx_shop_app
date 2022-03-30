@@ -176,7 +176,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                     onPressed: () {
                                       controller.clearInitialValue();
                                       Get.back();
-                                      
+
                                     },
                                     icon: Icon(
                                       Icons.skip_previous,
@@ -187,7 +187,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                     padding: EdgeInsets.only(right: 35),
                                     onPressed: () {
                                       controller.newProduct = existingProduct;
-                                      controller.addEditProduct();
+                                      controller.manageProduct();
                                     },
                                     icon: Icon(
                                       Icons.data_saver_on_rounded,

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/model/http_exeption_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
@@ -44,7 +45,7 @@ class ManagerController extends GetxController {
               'price': newProduct.price.toString(),
               'description': newProduct.description,
               'imageUrl': newProduct.imageUrl,
-              'isFavorite': newProduct.isFavorite.value,
+              'isFavorite': newProduct.isFavorite!.value,
             }))
         .catchError((onError) {
       throw onError;
@@ -57,17 +58,18 @@ class ManagerController extends GetxController {
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json');
     final dataBase = await http.get(url);
-    print(dataBase.body.toString());
+    // print(dataBase.body.toString());
     List<Product> decodedProducts = [];
     final decodedData = json.decode(dataBase.body) as Map<String, dynamic>;
     decodedData.forEach((prodId, prodValue) {
       final decodedId = prodId.toString();
-      final decodedProduct = Product(
+      var decodedProduct = Product(
         id: decodedId,
         description: prodValue['description'],
         title: prodValue['title'],
         imageUrl: prodValue['imageUrl'],
         price: double.parse(prodValue['price']),
+        isFavorite:  RxBool(prodValue['isFavorite'])   ,
       );
       decodedProducts.add(decodedProduct);
       // homeController.dummyList.add(decodedProduct);
@@ -78,11 +80,6 @@ class ManagerController extends GetxController {
   // update product on database
 
   Future<void> httpUpdate() async {
-    // if (homeController.dummyList
-    //     .any((element) => element.id == newProduct.id)) {
-    //   var indexUpdatedProduct = homeController.dummyList
-    //       .indexWhere((element) => element.id == newProduct.id);
-
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/${newProduct.id}.json');
     await http.patch(url,
@@ -91,12 +88,8 @@ class ManagerController extends GetxController {
           'price': newProduct.price.toString(),
           'description': newProduct.description,
           'imageUrl': newProduct.imageUrl,
-          'isFavorite': newProduct.isFavorite.value,
+          'isFavorite': newProduct.isFavorite!.value,
         }));
-
-    //   homeController.dummyList[indexUpdatedProduct] = newProduct;
-
-    // }
   }
 
   // Progress Indicator
@@ -126,30 +119,26 @@ class ManagerController extends GetxController {
   }
 
 // add / update product
-  Future<dynamic> addEditProduct() async {
+  Future<dynamic> manageProduct() async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
-
     formKey.currentState!.save();
-
     toogleIsLoading();
 
     try {
-
-
-      //update existing product
+      // check if the product already exists
       if (homeController.dummyList
           .any((element) => element.id == newProduct.id)) {
+        // update localy on device
         var indexUpdatedProduct = homeController.dummyList
             .indexWhere((element) => element.id == newProduct.id);
-
-       await httpUpdate();
-
         homeController.dummyList[indexUpdatedProduct] = newProduct;
+        // update on Database
+        await httpUpdate();
       } else {
-        /// add new product
+        /// adding a new product
         var response = await httpPostProduct();
         newProduct.id = await json.decode(response.body)['name'];
 
@@ -177,10 +166,31 @@ class ManagerController extends GetxController {
   }
 
 // delete product
-  deleteProduct(String id) {
-    var indexUpdatedProduct =
+  Future<void> deleteProductOptimistic(String id) async {
+    final selectedProductIndex =
         homeController.dummyList.indexWhere((element) => element.id == id);
-    homeController.dummyList.removeAt(indexUpdatedProduct);
+
+    var selectedProduct = homeController.dummyList[selectedProductIndex];
+    homeController.dummyList.remove(selectedProduct);
+
+    final url = Uri.parse(
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json');
+
+    var response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      homeController.dummyList.insert(selectedProductIndex, selectedProduct);
+      print(response.statusCode);
+      throw HttpExeption(message: 'delete fail  ');
+    }
+    selectedProduct.isBlank;
+  }
+
+  deleteProduct(String id) {
+    final url = Uri.parse(
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json');
+    http.delete(url);
+
+    homeController.dummyList.removeWhere((element) => element.id == id);
   }
 
   var newProduct = Product(

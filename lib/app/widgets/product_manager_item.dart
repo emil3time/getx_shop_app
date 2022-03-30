@@ -60,8 +60,16 @@ class ProductManagerItem extends GetView<ManagerController> {
               ),
             ),
             IconButton(
-              onPressed: () {
-                controller.deleteProduct(productData.id!);
+              onPressed: () async {
+                try {
+                  await controller.deleteProductOptimistic(productData.id!);
+                } catch (e) {
+                  Get.snackbar('Error', 'Delete fail',
+                      duration: Duration(seconds: 1),
+                      shouldIconPulse: true,
+                      
+                      icon: Icon(Icons.warning));
+                }
               },
               icon: Icon(
                 Icons.delete_forever,

@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/manager_controller.dart';
 import 'package:getx_shop_app/app/modules/home/views/product_screen_view.dart';
 
 import '../model/product_model.dart';
 
 class ProductSimpleTile extends GetView<HomeController> {
   var cartController = Get.find<CartController>();
-
+  var managerController = Get.put(ManagerController());
 
   Product product;
-  ProductSimpleTile(
-      {
-
-      required this.product});
+  ProductSimpleTile({required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +57,20 @@ class ProductSimpleTile extends GetView<HomeController> {
                 )),
             footer: GridTileBar(
               backgroundColor: Colors.black54,
-              leading: Obx((() =>
-                // print('product isfvorite ${product.isFavorite.value}');
+              leading: Obx(
+                (() =>
+                    // print('product isfvorite ${product.isFavorite.value}');
 
-                 IconButton(
-                  icon: Icon(Icons.favorite),
-                  color: product.isFavorite.value ? Colors.red : Colors.white,
-                  onPressed: () {
-                    product.toggleIsFavorite();
-                  },
-                )
-              ),),
+                    IconButton(
+                      icon: Icon(Icons.favorite),
+                      color:
+                          product.isFavorite!.value ? Colors.red : Colors.white,
+                      onPressed: () {
+                        product.toggleIsFavoriteOpt(product.id.toString());
+
+                      },
+                    )),
+              ),
               title: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
@@ -85,8 +86,8 @@ class ProductSimpleTile extends GetView<HomeController> {
                           ? Colors.green
                           : Colors.white,
                       onPressed: () {
-                        cartController.addCartItem(product.id ?? '', product.price,
-                            product.title, product.imageUrl);
+                        cartController.addCartItem(product.id ?? '',
+                            product.price, product.title, product.imageUrl);
 
                         Get.back();
 

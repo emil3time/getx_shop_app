@@ -56,7 +56,7 @@ class HomeController extends GetxController {
 
   // List of Products marked as favorite
   List<Product> get onlyFavoriteList {
-    return dummyList.where((e) => e.isFavorite.value).toList();
+    return dummyList.where((e) => e.isFavorite!.value).toList();
   }
 
   // create get to chandle private class
