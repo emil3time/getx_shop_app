@@ -65,9 +65,16 @@ class ProductSimpleTile extends GetView<HomeController> {
                       icon: Icon(Icons.favorite),
                       color:
                           product.isFavorite!.value ? Colors.red : Colors.white,
-                      onPressed: () {
-                        product.toggleIsFavoriteOpt(product.id.toString());
+                      onPressed: ()async {
+                        try {
+                         await product.toggleIsFavoriteOpt(product.id.toString());
+                        } catch (_) {
+                          Get.snackbar('Error', 'status change fail',
+                      duration: Duration(seconds: 1),
+                      shouldIconPulse: true,
 
+                      icon: Icon(Icons.warning));
+                        }
                       },
                     )),
               ),

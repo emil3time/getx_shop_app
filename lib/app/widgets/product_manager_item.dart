@@ -67,7 +67,7 @@ class ProductManagerItem extends GetView<ManagerController> {
                   Get.snackbar('Error', 'Delete fail',
                       duration: Duration(seconds: 1),
                       shouldIconPulse: true,
-                      
+
                       icon: Icon(Icons.warning));
                 }
               },

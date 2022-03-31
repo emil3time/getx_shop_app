@@ -26,7 +26,7 @@ class OrderCard extends GetView<OrderController> {
             subtitle: Text(
               DateFormat.yMMMMEEEEd().format(orderItem.dateTime),
             ),
-            trailing: GetBuilder<HomeController>(
+            trailing: GetBuilder<OrderController>(
               builder: (contr) {
                 return IconButton(
                   onPressed: () {

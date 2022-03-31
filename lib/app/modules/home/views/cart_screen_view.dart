@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -55,22 +53,9 @@ class CartScreenView extends GetView<CartController> {
                             ),
                           ),
                         )),
-                    TextButton(
-                      onPressed: () {
-                        orderController.addOrders(controller.cartMap.values.toList(),
-                            controller.totalAmt);
-
-                        controller.showAddOrderSnackBar();
-
-                        controller.removeAllCartItems();
-                      },
-                      child: Text(
-                        'Order now',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
+                    CustomOrderButton(
+                      orderController: orderController,
+                      controller: controller,
                     )
                   ],
                 ),
@@ -84,5 +69,39 @@ class CartScreenView extends GetView<CartController> {
         ],
       ),
     );
+  }
+}
+
+class CustomOrderButton extends StatelessWidget {
+  const CustomOrderButton({
+    Key? key,
+    required this.orderController,
+    required this.controller,
+  }) : super(key: key);
+
+  final OrderController orderController;
+  final CartController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => TextButton(
+          onPressed: () {
+            orderController.httpPostOrder(
+                controller.cartMap.values.toList(), controller.totalAmt,);
+
+            controller.showAddOrderSnackBar();
+
+            controller.removeAllCartItems();
+          },
+          child: orderController.isLoading.value
+              ? CircularProgressIndicator()
+              : Text(
+                  'Order now',
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 16,
+                  ),
+                ),
+        ));
   }
 }

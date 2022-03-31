@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/model/http_exeption_model.dart';
 import 'package:http/http.dart' as http;
 
 class Product {
@@ -22,17 +23,16 @@ class Product {
   Future<void> toggleIsFavoriteOpt(String id) async {
     var savedStatus = isFavorite!.value;
     isFavorite!.value = !isFavorite!.value;
-    try {
-      final url = Uri.parse(
-          'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json');
-      var response = await http.patch(url,
-          body: json.encode({'isFavorite': isFavorite!.value}));
-      if (response.statusCode >= 400) {
-        isFavorite!.value = savedStatus;
-      }
-    } catch (e) {
+
+    final url = Uri.parse(
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json');
+    var response = await http.patch(url,
+        body: json.encode({'isFavorite': isFavorite!.value}));
+    if (response.statusCode >= 400) {
       isFavorite!.value = savedStatus;
+      throw HttpExeption(message: 'fail');
     }
+    // isFavorite!.value = savedStatus;
   }
 }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -55,12 +54,16 @@ class ManagerController extends GetxController {
 
   //fetch product
   Future<void> httpFetchProduct() async {
+   
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json');
     final dataBase = await http.get(url);
     // print(dataBase.body.toString());
     List<Product> decodedProducts = [];
-    final decodedData = json.decode(dataBase.body) as Map<String, dynamic>;
+    final decodedData = json.decode(dataBase.body) as Map<String, dynamic>?;
+    if (decodedData == null) {
+      return;
+    }
     decodedData.forEach((prodId, prodValue) {
       final decodedId = prodId.toString();
       var decodedProduct = Product(
@@ -69,10 +72,9 @@ class ManagerController extends GetxController {
         title: prodValue['title'],
         imageUrl: prodValue['imageUrl'],
         price: double.parse(prodValue['price']),
-        isFavorite:  RxBool(prodValue['isFavorite'])   ,
+        isFavorite: RxBool(prodValue['isFavorite']),
       );
       decodedProducts.add(decodedProduct);
-      // homeController.dummyList.add(decodedProduct);
     });
     homeController.dummyList.value = decodedProducts;
   }

@@ -12,6 +12,6 @@ class OrderItem {
       required this.dateTime,
       required this.id,
       required this.orderProducts,
-      this.detailsShown = false,
+       this.detailsShown = false,
       });
 }
