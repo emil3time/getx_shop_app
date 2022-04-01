@@ -11,8 +11,8 @@ class GlobalController extends GetxController {
 
   @override
   void onInit() {
-    managerController.httpFetchProduct();
-    orderController.httpFethOrders();
+/*     managerController.httpFetchProduct();
+    orderController.httpFethOrders(); */
     super.onInit();
   }
 }

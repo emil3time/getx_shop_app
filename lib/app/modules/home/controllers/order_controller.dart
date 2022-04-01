@@ -75,7 +75,7 @@ class OrderController extends GetxController {
   // }
 
   Future<void> httpFethOrders() async {
-  
+
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/orders.json');
     final dataBase = await http.get(url);

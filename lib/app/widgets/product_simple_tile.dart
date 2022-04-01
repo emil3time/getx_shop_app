@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/manager_controller.dart';
@@ -57,27 +58,24 @@ class ProductSimpleTile extends GetView<HomeController> {
                 )),
             footer: GridTileBar(
               backgroundColor: Colors.black54,
-              leading: Obx(
-                (() =>
-                    // print('product isfvorite ${product.isFavorite.value}');
-
-                    IconButton(
-                      icon: Icon(Icons.favorite),
-                      color:
-                          product.isFavorite!.value ? Colors.red : Colors.white,
-                      onPressed: ()async {
-                        try {
-                         await product.toggleIsFavoriteOpt(product.id.toString());
-                        } catch (_) {
-                          Get.snackbar('Error', 'status change fail',
-                      duration: Duration(seconds: 1),
-                      shouldIconPulse: true,
-
-                      icon: Icon(Icons.warning));
-                        }
-                      },
-                    )),
-              ),
+              leading: GetBuilder<HomeController>(
+                  init: HomeController(),
+                  builder: (controller) => IconButton(
+                        icon: Icon(Icons.favorite),
+                        color: product.isFavorite ? Colors.red : Colors.white,
+                        onPressed: () async {
+                          try {
+                            await product
+                                .toggleFavoriteFirebase(!product.isFavorite, token??"no token")
+                                .then((value) => controller.updateState());
+                          } catch (_) {
+                            Get.snackbar('Error', 'status change fail',
+                                duration: Duration(seconds: 1),
+                                shouldIconPulse: true,
+                                icon: Icon(Icons.warning));
+                          }
+                        },
+                      )),
               title: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(

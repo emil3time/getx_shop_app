@@ -59,7 +59,7 @@ class ProductManagerItem extends GetView<ManagerController> {
                 color: Colors.black54,
               ),
             ),
-            IconButton(
+            /* IconButton(
               onPressed: () async {
                 try {
                   await controller.deleteProductOptimistic(productData.id!);
@@ -76,7 +76,7 @@ class ProductManagerItem extends GetView<ManagerController> {
                 size: 30,
                 color: Colors.black54,
               ),
-            ),
+            ), */
           ],
         ),
       ),

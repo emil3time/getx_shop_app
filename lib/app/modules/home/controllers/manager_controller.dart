@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/infrastructure/fb_services/db/firebase.dart';
 import 'package:getx_shop_app/app/model/http_exeption_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,7 +9,7 @@ import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart'
 import '../../../model/product_model.dart';
 
 class ManagerController extends GetxController {
-  var homeController = Get.put(HomeController());
+  /* var homeController = Get.put(HomeController()); */
 
   TextEditingController imageUrlController = TextEditingController();
 
@@ -34,7 +35,7 @@ class ManagerController extends GetxController {
   ///
   var formKey = GlobalKey<FormState>();
   // post probuct
-  Future<dynamic> httpPostProduct() async {
+  /* Future<dynamic> httpPostProduct() async {
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json');
     final response = await http
@@ -50,38 +51,13 @@ class ManagerController extends GetxController {
       throw onError;
     });
     return response;
-  }
+  } */
 
-  //fetch product
-  Future<void> httpFetchProduct() async {
-   
-    final url = Uri.parse(
-        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json');
-    final dataBase = await http.get(url);
-    // print(dataBase.body.toString());
-    List<Product> decodedProducts = [];
-    final decodedData = json.decode(dataBase.body) as Map<String, dynamic>?;
-    if (decodedData == null) {
-      return;
-    }
-    decodedData.forEach((prodId, prodValue) {
-      final decodedId = prodId.toString();
-      var decodedProduct = Product(
-        id: decodedId,
-        description: prodValue['description'],
-        title: prodValue['title'],
-        imageUrl: prodValue['imageUrl'],
-        price: double.parse(prodValue['price']),
-        isFavorite: RxBool(prodValue['isFavorite']),
-      );
-      decodedProducts.add(decodedProduct);
-    });
-    homeController.dummyList.value = decodedProducts;
-  }
+
 
   // update product on database
 
-  Future<void> httpUpdate() async {
+/*   Future<void> httpUpdate() async {
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/${newProduct.id}.json');
     await http.patch(url,
@@ -92,7 +68,7 @@ class ManagerController extends GetxController {
           'imageUrl': newProduct.imageUrl,
           'isFavorite': newProduct.isFavorite!.value,
         }));
-  }
+  } */
 
   // Progress Indicator
   var isLoading = false.obs;
@@ -121,7 +97,7 @@ class ManagerController extends GetxController {
   }
 
 // add / update product
-  Future<dynamic> manageProduct() async {
+  /* Future<dynamic> manageProduct() async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -165,10 +141,10 @@ class ManagerController extends GetxController {
       return Text('This field is mandatory');
     }
     return null;
-  }
+  } */
 
 // delete product
-  Future<void> deleteProductOptimistic(String id) async {
+  /* Future<void> deleteProductOptimistic(String id) async {
     final selectedProductIndex =
         homeController.dummyList.indexWhere((element) => element.id == id);
 
@@ -185,23 +161,23 @@ class ManagerController extends GetxController {
       throw HttpExeption(message: 'delete fail  ');
     }
     selectedProduct.isBlank;
-  }
+  } */
 
-  deleteProduct(String id) {
+ /*  deleteProduct(String id) {
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json');
     http.delete(url);
 
     homeController.dummyList.removeWhere((element) => element.id == id);
-  }
+  } */
 
-  var newProduct = Product(
+/*   var newProduct = Product(
     description: '',
     id: '',
     title: '',
     imageUrl: '',
     price: 0.0,
-  );
+  ); */
 
   /*  var initialValues =
     Product(
@@ -216,11 +192,11 @@ class ManagerController extends GetxController {
     'imageUrl': '',
     'price': '', */
   ; */
-
+/*
   editProduct(Product productData) {
     newProduct = productData;
     imageUrlController.text = newProduct.imageUrl;
-  }
+  } */
 
   /* managerController.imageUrlController.text = productData.imageUrl; */
 
@@ -230,14 +206,14 @@ class ManagerController extends GetxController {
     return dummyList.firstWhere((e) => e.id == id);
   } */
 
-  clearInitialValue() {
+/*   clearInitialValue() {
     newProduct =
         Product(description: '', id: '', title: '', imageUrl: '', price: 0.0);
     imageUrlController.text = '';
-  }
+  } */
 
   @override
-  void onInit() {
+  void onInit()async {
     urlFocusNode.addListener(updateImage);
     // TODO: implement onInit
     super.onInit();

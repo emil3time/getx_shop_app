@@ -1,44 +1,17 @@
 import 'package:get/get.dart';
+import 'autch_controller.dart';
 
 import 'package:getx_shop_app/app/model/product_model.dart';
 
+import '../../../infrastructure/fb_services/db/firebase.dart';
+
 class HomeController extends GetxController {
   RxList<Product> dummyList = <Product>[].obs;
-
-  // <Product>[
-  //   Product(
-  //     id: 'p1',
-  //     title: 'Red Shirt',
-  //     description: 'A red shirt - it is pretty red!',
-  //     price: 29.99,
-  //     imageUrl:
-  //         'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-  //   ),
-  //   Product(
-  //     id: 'p2',
-  //     title: 'Trousers',
-  //     description: 'A nice pair of trousers.',
-  //     price: 59.99,
-  //     imageUrl:
-  //         'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-  //   ),
-  //   Product(
-  //     id: 'p3',
-  //     title: 'Yellow Scarf',
-  //     description: 'Warm and cozy - exactly what you need for the winter.',
-  //     price: 19.99,
-  //     imageUrl:
-  //         'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-  //   ),
-  //   Product(
-  //     id: 'p4',
-  //     title: 'A Pan',
-  //     description: 'Prepare any meal you want.',
-  //     price: 49.99,
-  //     imageUrl:
-  //         'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-  //   ),
-  // ].obs;
+  //fetch product
+  Future<void> httpFetchProduct() async {
+    dummyList.value =
+        await RealTimeDataBase().httpFetchProduct(token ?? "no token");
+  }
 
   // RxBool where use switches
   RxBool showOnlyFavorite = false.obs;
@@ -54,9 +27,13 @@ class HomeController extends GetxController {
     print(showOnlyFavorite);
   }
 
+  void updateState() {
+    update();
+  }
+
   // List of Products marked as favorite
   List<Product> get onlyFavoriteList {
-    return dummyList.where((e) => e.isFavorite!.value).toList();
+    return dummyList.where((e) => e.isFavorite).toList();
   }
 
   // create get to chandle private class
@@ -77,5 +54,18 @@ class HomeController extends GetxController {
 //
   Product findSingleProductById(String id) {
     return dummyList.firstWhere((e) => e.id == id);
+  }
+
+  @override
+  void onInit() async {
+    await httpFetchProduct();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+
+    super.onClose();
   }
 }

@@ -13,9 +13,9 @@ class ProductsGrid extends GetView<HomeController> {
 
     return Obx(
       () => GridView.builder(
-        itemCount: controller.showOnlyFavorite.value
+        itemCount:/*  controller.showOnlyFavorite.value
             ? controller.onlyFavoriteList.length
-            : controller.dummyList.length,
+            : */ controller.dummyList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             mainAxisExtent: 330,
             crossAxisCount: 2,
@@ -26,11 +26,6 @@ class ProductsGrid extends GetView<HomeController> {
             product: controller.showOnlyFavorite.value
                 ? controller.onlyFavoriteList[i]
                 : controller.dummyList[i]
-
-            /* price: controller.dummyList[i].price,
-            imageUrl: controller.dummyList[i].imageUrl,
-            title: controller.dummyList[i].title,
-            id: controller.dummyList[i].id, */
             ),
       ),
     );

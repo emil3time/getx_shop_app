@@ -65,7 +65,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                 return null;
                               },
                               onSaved: (newValue) {
-                                existingProduct.price = double.parse(newValue!);
+                                /* existingProduct.price = double.parse(newValue!); */
                               },
                               decoration: customInputDecoration('price'),
                               textInputAction: TextInputAction.next,
@@ -174,7 +174,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                 IconButton(
                                     padding: EdgeInsets.only(right: 35),
                                     onPressed: () {
-                                      controller.clearInitialValue();
+                                      /* controller.clearInitialValue(); */
                                       Get.back();
 
                                     },
@@ -186,8 +186,8 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                 IconButton(
                                     padding: EdgeInsets.only(right: 35),
                                     onPressed: () {
-                                      controller.newProduct = existingProduct;
-                                      controller.manageProduct();
+/*                                       controller.newProduct = existingProduct;
+                                      controller.manageProduct(); */
                                     },
                                     icon: Icon(
                                       Icons.data_saver_on_rounded,
