@@ -23,7 +23,7 @@ class ProductManagerScreenView extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         actions: [
-/*           IconButton(
+          IconButton(
             onPressed: () {
               Get.defaultDialog(
                   title: 'Add new product', content: AddEditProductDialog(existingProduct: controller.newProduct,));
@@ -32,7 +32,7 @@ class ProductManagerScreenView extends StatelessWidget {
               Icons.add,
               size: 33,
             ),
-          ), */
+          ),
         ],
       ),
       body: RefreshIndicator(

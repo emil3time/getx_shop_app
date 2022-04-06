@@ -24,9 +24,9 @@ class HomeScreenView extends GetView<HomeController> {
           PopupMenuButton(
             onSelected: (selectedFilter) {
               if (selectedFilter == FilterSwitch.favorite) {
-                /* controller.switchTooFavorites(); */
+                controller.switchTooFavorites();
               } else {
-                /* controller.switchTooAll(); */
+                controller.switchTooAll();
               }
             },
             itemBuilder: (_) => [

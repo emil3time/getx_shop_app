@@ -13,14 +13,16 @@ Product productFromJson(String str) => Product.fromJson(json.decode(str));
 
 String productToJson(Product data) => json.encode(data.toJson());
 
-class Product{
-  Product(
-      {required this.description,
-      required this.imageUrl,
-      this.isFavorite = false,
-      required this.price,
-      required this.title,
-      this.id});
+class Product {
+  Product({
+    required this.description,
+    required this.imageUrl,
+    this.isFavorite = false,
+    required this.price,
+    required this.title,
+    this.id,
+    this.isInCart = false,
+  });
 
   String description;
   String imageUrl;
@@ -28,6 +30,7 @@ class Product{
   double price;
   String title;
   String? id;
+  bool isInCart;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         description: json["description"],
@@ -41,19 +44,16 @@ class Product{
         "description": description,
         "imageUrl": imageUrl,
         "isFavorite": isFavorite,
-        "price": price,
+        "price": price.toString(),
         "title": title,
       };
 
-
- Future<void> toggleFavoriteFirebase(bool newIisFfavorite, String token) async{
-   await RealTimeDataBase()
-        .toggleIsFavoriteOpt(newIisFfavorite, id ?? '', token)
-        .then((value) => isFavorite = newIisFfavorite);
+  Future<void> toggleFavoriteFirebase(bool isFavorite) async {
+    await RealTimeDataBase()
+        .toggleIsFavoriteOpt(isFavorite, id ?? '')
+        .then((_) => isFavorite = isFavorite);
   }
 }
-
-
 
 
 

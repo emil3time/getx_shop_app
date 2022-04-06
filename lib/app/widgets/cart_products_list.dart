@@ -12,11 +12,11 @@ class CartProductsList extends GetView<CartController> {
       height: 400,
       width: 380,
       child: Obx(() => ListView.builder(
-            itemCount: controller.cartMap.length,
+            itemCount: controller.order.orderProducts.length,
             itemBuilder: (context, i) {
               return CartProductCard(
-                cartItem: controller.cartMap.values.toList()[i],
-                productId: controller.cartMap.keys.toList()[i],
+                cartProduct: controller.order.orderProducts[i],
+
                 // to extract single value
                 // imageUrl: controller.cartMap.values.toList()[i].imageUrl,
               );

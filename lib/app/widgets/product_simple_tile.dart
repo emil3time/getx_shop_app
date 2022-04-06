@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/model/order_model.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
@@ -9,7 +10,7 @@ import 'package:getx_shop_app/app/modules/home/views/product_screen_view.dart';
 import '../model/product_model.dart';
 
 class ProductSimpleTile extends GetView<HomeController> {
-  var cartController = Get.find<CartController>();
+  var cartController = Get.put(CartController());
   var managerController = Get.put(ManagerController());
 
   Product product;
@@ -66,7 +67,7 @@ class ProductSimpleTile extends GetView<HomeController> {
                         onPressed: () async {
                           try {
                             await product
-                                .toggleFavoriteFirebase(!product.isFavorite, token??"no token")
+                                .toggleFavoriteFirebase(!product.isFavorite)
                                 .then((value) => controller.updateState());
                           } catch (_) {
                             Get.snackbar('Error', 'status change fail',
@@ -84,25 +85,29 @@ class ProductSimpleTile extends GetView<HomeController> {
                   style: TextStyle(fontSize: 18, fontFamily: ''),
                 ),
               ),
-              trailing: Obx(
-                (() => IconButton(
-                      icon: Icon(Icons.shopping_cart),
-                      color: cartController.cartMap.containsKey(product.id)
-                          ? Colors.green
-                          : Colors.white,
-                      onPressed: () {
-                        cartController.addCartItem(product.id ?? '',
-                            product.price, product.title, product.imageUrl);
+              trailing:Obx(()=> IconButton(
+                        icon: Icon(Icons.shopping_cart),
+                        color: cartController.order.orderProducts
+                                .any((element) => element.id == product.id)
+                            ? Colors.green
+                            : Colors.white,
+                        onPressed: () {
+                          cartController.addCartItem(CartProduct(
+                              id: product.id!,
+                              itemName: product.title,
+                              imageUrl: product.imageUrl,
+                              price: product.price,
+                              quantity: 1.obs));
 
-                        Get.back();
+                          Get.snackbar(
+                              'Cart info', 'added a product to the cart',
+                              icon: Icon(Icons.add_shopping_cart),
+                              snackPosition: SnackPosition.BOTTOM,
+                              duration: Duration(seconds: 1));
+                        },
+                      ) )
 
-                        Get.snackbar('Cart info', 'added a product to the cart',
-                            icon: Icon(Icons.add_shopping_cart),
-                            snackPosition: SnackPosition.BOTTOM,
-                            duration: Duration(seconds: 1));
-                      },
-                    )),
-              ),
+
             ),
           ),
         ),

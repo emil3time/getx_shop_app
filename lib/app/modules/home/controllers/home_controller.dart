@@ -9,8 +9,8 @@ class HomeController extends GetxController {
   RxList<Product> dummyList = <Product>[].obs;
   //fetch product
   Future<void> httpFetchProduct() async {
-    dummyList.value =
-        await RealTimeDataBase().httpFetchProduct(token ?? "no token");
+    dummyList.value = await RealTimeDataBase()
+        .featchProduct();
   }
 
   // RxBool where use switches
@@ -18,13 +18,13 @@ class HomeController extends GetxController {
   // switch for favorite
   void switchTooFavorites() {
     showOnlyFavorite.value = true;
-    print(showOnlyFavorite);
+
   }
 
   // switch for all
   void switchTooAll() {
     showOnlyFavorite.value = false;
-    print(showOnlyFavorite);
+
   }
 
   void updateState() {

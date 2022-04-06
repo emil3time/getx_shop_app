@@ -9,28 +9,33 @@ class OrderScreenView extends StatelessWidget {
   final controller = Get.put(OrderController());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.amber,
-      appBar: AppBar(
-        title: Text('Current orders'),
-      ),
-      body: controller.orders.isEmpty
-          ? Center(
-              child: Text(
-                'Currently the order list is empty',
-                style: TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontSize: 20,
+    return RefreshIndicator(
+      onRefresh: () => controller.httpFethOrders(),
+      child: Scaffold(
+        backgroundColor: Colors.amber,
+        appBar: AppBar(
+          title: Text('Current orders'),
+        ),
+        body: controller.orders.isEmpty
+            ? Center(
+                child: Text(
+                  'Currently the order list is empty',
+                  style: TextStyle(
+                    fontFamily: 'Comfortaa',
+                    fontSize: 20,
+                  ),
                 ),
+              )
+            : GetBuilder<OrderController>(
+                builder: (getController) => ListView.builder(
+                    itemCount: getController.orders.length,
+                    itemBuilder: (context, i) {
+                      return OrderCard(
+                        orderItem: getController.orders[i],
+                      );
+                    }),
               ),
-            )
-          : ListView.builder(
-              itemCount: controller.orders.length,
-              itemBuilder: (context, i) {
-                return OrderCard(
-                  orderItem: controller.orders[i],
-                );
-              }),
+      ),
     );
   }
 }

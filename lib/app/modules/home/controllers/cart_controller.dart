@@ -1,66 +1,93 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/infrastructure/fb_services/db/firebase.dart';
+import 'package:getx_shop_app/app/model/order_model.dart';
+import 'package:getx_shop_app/app/model/product_model.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/order_controller.dart';
+import 'package:getx_shop_app/app/widgets/order_card.dart';
 
 import '../../../model/cart_item_model.dart';
 
 class CartController extends GetxController {
-  final RxMap<String, CartItem> _cartMap = <String, CartItem>{}.obs;
-  // getter cartmap
-  Map<String, CartItem> get cartMap {
-    return {..._cartMap};
-  }
+  var orderController = Get.put(OrderController());
+
+  Order order = Order(
+      amount: 0, dataTime: DateTime.now(), orderProducts: <CartProduct>[].obs);
 
   RxInt _cartCounter = 0.obs;
-  // AppBar  cart counter
   String get cartCounter {
     return _cartCounter.value.toString();
   }
 
-  RxDouble _totalAmount = 0.0.obs;
+  final _toatlOrder = 0.0.obs;
 
-  final _toatlAmt = 0.0.obs;
-
-  double get totalAmt {
+  double get totalOrder {
     double total = 0.0;
-    _cartMap.forEach((key, cartItem) {
+    order.orderProducts.forEach((cartItem) {
       total += cartItem.price * cartItem.quantity.value;
     });
-    _toatlAmt.value = total;
-    return _toatlAmt.value;
+    _toatlOrder.value = total;
+    return _toatlOrder.value;
   }
 
-  set totalAmt(value) => _toatlAmt.value = value;
+  set totalOrder(value) => _toatlOrder.value = value;
 
-  /* double get totalAmount {
+  final RxDouble _totalProduct = 0.0.obs;
+  double get totalProduct {
     var total = 0.0;
-    _cartMap.forEach((key, cartItem) {
-      total += cartItem.price * cartItem.quantity.value;
+    order.orderProducts.forEach((element) {
+      element.quantity != 0;
+      total += element.price * element.quantity.value;
     });
-    _totalAmount.value = total;
+
+    /*  total += cartItem.price * cartItem.quantity.value; */
+    _totalProduct.value = total;
     return total;
-  } */
+  }
+
+  void addOrder(RxList<CartProduct> cartItems, double totalAmount) {
+    if (totalAmount == 0) {
+      null;
+    } else {
+      order = Order(
+          amount: totalAmount,
+          orderProducts: cartItems,
+          dataTime: DateTime.now());
+      orderController.orders.insert(0, order);
+    }
+  }
+
+  Future<void> httpPostOrder() async {
+    RealTimeDataBase().postOrder(order);
+  }
 
   // remowe by compare key to productId (productId is both key and product id)
-  void removeCartItem({required String productId, required int quantity}) {
-    _cartMap.remove(productId);
-    _cartCounter - quantity;
+  void removeCartItem(CartProduct product) {
+    order.orderProducts.removeWhere((element) => element.id == product.id);
+    _cartCounter -= product.quantity.value;
+    if (product.quantity.value == 0) {
+      update();
+    }
   }
 
   // alternative way - remove by compare ulr
-  void removeCartItem2({required String imageUrl, required int quantity}) {
-    _cartMap.removeWhere((key, value) => value.imageUrl == imageUrl);
+  /* void removeCartItem2({required String imageUrl, required int quantity}) {
+    order.removeWhere((key, value) => value.imageUrl == imageUrl);
 
     _cartCounter - quantity;
-  }
+  } */
 
   void removeAllCartItems() {
-    _cartMap.value = {};
+    order.orderProducts.value = [];
     _cartCounter.value = 0;
-    // print(_orders);
+    _totalProduct.value = 0;
   }
 
   void showAddOrderSnackBar() {
-    if (totalAmt != 0) {
+    if (totalOrder != 0) {
       Get.snackbar(
         'Order info',
         'a new order has been added',
@@ -74,34 +101,26 @@ class CartController extends GetxController {
     }
   }
 
-  /////
-  void addCartItem(
-      String productId, double price, String title, String imageUrl) {
-    if (_cartMap.containsKey(productId)) {
-      _cartMap.update(productId, (existingCartItem) {
-        return CartItem(
-          id: existingCartItem.id,
-          itemName: existingCartItem.itemName,
-          imageUrl: imageUrl,
-          price: existingCartItem.price,
-          quantity: existingCartItem.quantity + 1,
-        );
-      });
-    } else {
-      _cartMap.putIfAbsent(
-        productId,
-        () => CartItem(
-          id: DateTime.now().toString(),
-          itemName: title,
-          imageUrl: imageUrl,
-          price: price,
-          quantity: 1.obs,
-        ),
-      );
-    }
+  //  cartController.order!.orderProducts.any((element) => element.id == product.id)
 
-    print(_cartMap.length);
-    print(cartCounter);
+  void updateState() {
+    update();
+  }
+
+  /////
+  void addCartItem(CartProduct cartProduct) {
+    if (order.orderProducts.any((element) => element.id == cartProduct.id)) {
+      var index = order.orderProducts
+          .indexWhere((element) => element.id == cartProduct.id);
+
+      // order!.orderProducts[index].imageUrl= cartProduct.imageUrl;
+      order.orderProducts[index].quantity += 1;
+    } else {
+      order.orderProducts.add(cartProduct);
+    }
+    // print(order.length);
+
     _cartCounter++;
+    update();
   }
 }

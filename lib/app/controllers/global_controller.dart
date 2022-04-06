@@ -4,8 +4,8 @@ import 'package:getx_shop_app/app/modules/home/controllers/manager_controller.da
 import 'package:getx_shop_app/app/modules/home/controllers/order_controller.dart';
 
 class GlobalController extends GetxController {
-  final managerController = Get.put(ManagerController());
-  final orderController = Get.put(OrderController());
+  // final managerController = Get.put(ManagerController());
+  // final orderController = Get.put(OrderController());
 
   final box = GetStorage();
 

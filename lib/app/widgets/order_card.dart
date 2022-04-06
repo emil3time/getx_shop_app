@@ -8,7 +8,7 @@ import 'package:getx_shop_app/app/widgets/order_card_details.dart';
 import 'package:intl/intl.dart';
 
 class OrderCard extends GetView<OrderController> {
-  final OrderItem orderItem;
+  final Order orderItem;
   OrderCard({required this.orderItem});
 
   @override
@@ -24,26 +24,26 @@ class OrderCard extends GetView<OrderController> {
               orderItem.amount.toStringAsFixed(2),
             ),
             subtitle: Text(
-              DateFormat.yMMMMEEEEd().format(orderItem.dateTime),
+              DateFormat.yMMMMEEEEd().format(orderItem.dataTime),
             ),
             trailing: GetBuilder<OrderController>(
               builder: (contr) {
                 return IconButton(
                   onPressed: () {
-                    controller.togleShowDetails(orderItem);
+                    /* controller.togleShowDetails(orderItem); */
                   },
-                  icon: orderItem.detailsShown
+                  icon: /* orderItem.detailsShown
                       ? Icon(
                           Icons.expand_less,
                         )
-                      : Icon(
+                      : */ Icon(
                           Icons.expand_more,
                         ),
                 );
               },
             ),
           ),
-          GetBuilder<OrderController>(
+          /* GetBuilder<OrderController>(
             /* init: controller, */
             builder: (contr) {
               if (orderItem.detailsShown) {
@@ -55,7 +55,7 @@ class OrderCard extends GetView<OrderController> {
               }
               return SizedBox();
             },
-          )
+          ) */
         ],
       ),
     );

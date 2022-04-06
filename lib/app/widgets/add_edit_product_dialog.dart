@@ -65,7 +65,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                 return null;
                               },
                               onSaved: (newValue) {
-                                /* existingProduct.price = double.parse(newValue!); */
+                                existingProduct.price = double.parse(newValue!);
                               },
                               decoration: customInputDecoration('price'),
                               textInputAction: TextInputAction.next,
@@ -134,13 +134,10 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                           !value.startsWith('https')) {
                                         return 'Please enter a valid URL';
                                       }
-                                      if (!value.endsWith('jpg') && //true
-                                          !value.endsWith('png') && //false
+                                      if (!value.endsWith('jpg') &&
+                                          !value.endsWith('png') &&
                                           !value.endsWith('jpeg')) {
-                                        //false
-                                        print(value.endsWith('jpg'));
-                                        print(value.endsWith('png'));
-                                        print(value.endsWith('jpeg'));
+
 
                                         return 'Please enter a valid URL2';
                                       }
@@ -174,7 +171,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                 IconButton(
                                     padding: EdgeInsets.only(right: 35),
                                     onPressed: () {
-                                      /* controller.clearInitialValue(); */
+                                      controller.clearInitialValue();
                                       Get.back();
 
                                     },
@@ -186,8 +183,8 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                 IconButton(
                                     padding: EdgeInsets.only(right: 35),
                                     onPressed: () {
-/*                                       controller.newProduct = existingProduct;
-                                      controller.manageProduct(); */
+                                      controller.newProduct = existingProduct;
+                                      controller.updateProduct();
                                     },
                                     icon: Icon(
                                       Icons.data_saver_on_rounded,

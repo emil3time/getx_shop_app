@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/model/cart_item_model.dart';
+import 'package:getx_shop_app/app/model/order_model.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 
 import '../model/product_model.dart';
 
 class CartProductCard extends GetView<CartController> {
-  CartItem cartItem;
-  String productId;
+  CartProduct cartProduct;
+
   CartProductCard({
-    required this.cartItem,
-    required this.productId,
+    required this.cartProduct,
   });
 
   @override
@@ -25,7 +25,7 @@ class CartProductCard extends GetView<CartController> {
           size: 50,
         ),
       ),
-      key: ValueKey(cartItem.id),
+      key: ValueKey(cartProduct.id),
       direction: DismissDirection.endToStart,
        confirmDismiss: (direction) {
         return showDialog(
@@ -54,7 +54,7 @@ class CartProductCard extends GetView<CartController> {
       },
       onDismissed: (direction) {
         controller.removeCartItem(
-            quantity: cartItem.quantity.value, productId: productId);
+            cartProduct);
       },
       child: Card(
         elevation: 6,
@@ -67,7 +67,7 @@ class CartProductCard extends GetView<CartController> {
                 height: 70,
                 width: 60,
                 child: Image.network(
-                  cartItem.imageUrl,
+                  cartProduct.imageUrl,
                   fit: BoxFit.scaleDown,
                 ),
               ),
@@ -81,19 +81,19 @@ class CartProductCard extends GetView<CartController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cartItem.itemName,
+                      cartProduct.itemName,
                       style: TextStyle(fontSize: 18, fontFamily: 'Comfortaa'),
                     ),
                     // SizedBox(height: 15,),
                     Text(
-                      cartItem.price.toString(),
+                      cartProduct.price.toString(),
                       style: TextStyle(fontSize: 14, color: Colors.black54),
                     )
                   ],
                 ),
               ),
               Text(
-                'x ${cartItem.quantity}',
+                'x ${cartProduct.quantity}',
                 style: TextStyle(fontSize: 18, fontFamily: 'Comfortaa'),
               ),
               SizedBox(
@@ -102,7 +102,7 @@ class CartProductCard extends GetView<CartController> {
               SizedBox(
                 width: 60,
                 child: Text(
-                    '${(cartItem.quantity * cartItem.price).toStringAsFixed(2)}'),
+                    '${(cartProduct.quantity * cartProduct.price).toStringAsFixed(2)}'),
               )
             ],
           ),

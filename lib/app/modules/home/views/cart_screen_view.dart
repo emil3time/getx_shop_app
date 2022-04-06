@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/model/order_model.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/order_controller.dart';
@@ -46,17 +47,14 @@ class CartScreenView extends GetView<CartController> {
                         ),
                         label: Obx(
                           () => Text(
-                            controller.totalAmt.toStringAsFixed(2),
+                            controller.totalOrder.toStringAsFixed(2),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 28,
                             ),
                           ),
                         )),
-                    CustomOrderButton(
-                      orderController: orderController,
-                      controller: controller,
-                    )
+                    CustomOrderButton()
                   ],
                 ),
               ),
@@ -73,24 +71,18 @@ class CartScreenView extends GetView<CartController> {
 }
 
 class CustomOrderButton extends StatelessWidget {
-  const CustomOrderButton({
-    Key? key,
-    required this.orderController,
-    required this.controller,
-  }) : super(key: key);
-
-  final OrderController orderController;
-  final CartController controller;
+  final OrderController orderController = Get.put(OrderController());
+  final CartController controller = Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => TextButton(
-          onPressed: () {
-            orderController.httpPostOrder(
-                controller.cartMap.values.toList(), controller.totalAmt,);
+          onPressed: () async {
+            controller.addOrder(
+                controller.order.orderProducts, controller.totalOrder);
+                await  controller.httpPostOrder();
 
             controller.showAddOrderSnackBar();
-
             controller.removeAllCartItems();
           },
           child: orderController.isLoading.value

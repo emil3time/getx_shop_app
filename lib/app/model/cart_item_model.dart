@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+/* import 'package:get/get.dart';
 
 class CartItem {
   String id;
@@ -14,4 +14,4 @@ class CartItem {
     required this.price,
     required this.quantity,
   });
-}
+} */
