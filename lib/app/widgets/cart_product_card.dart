@@ -109,6 +109,6 @@ class CartProductCard extends GetView<CartController> {
         ),
       ),
     );
-    ;
+    
   }
 }

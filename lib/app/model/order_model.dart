@@ -10,21 +10,23 @@ Order orderFromJson(String str) => Order.fromJson(json.decode(str));
 String orderToJson(Order data) => json.encode(data.toJson());
 
 class Order {
-  Order({
-    required this.amount,
-    required this.dataTime,
-    /* required this.id, */
-    required this.orderProducts,
-  });
+  Order(
+      {required this.amount,
+      required this.dataTime,
+      /* required this.id, */
+      required this.orderProducts,
+      this.showOrderDetails = false });
 
   double amount;
   DateTime dataTime;
   RxList<CartProduct> orderProducts;
+  bool showOrderDetails;
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
       amount: json["amount"],
-      dataTime:DateTime.now(),//DateTime.parse(json["dataTime"])
+      dataTime: DateTime.now(),
+      showOrderDetails: json["showOrderDetails"],
       orderProducts: RxList<CartProduct>.from(
           json["orderProducts"].map((x) => CartProduct.fromJson(x))),
     );
@@ -34,6 +36,7 @@ class Order {
   Map<String, dynamic> toJson() => {
         "amount": amount,
         "dataTime": tmpTimeStamp.toIso8601String(),
+        "showOrderDetails": showOrderDetails,
         "orderProducts":
             List<dynamic>.from(orderProducts.map((x) => x.toJson())),
       };
@@ -59,7 +62,7 @@ class CartProduct {
       id: json["id"],
       itemName: json["itemName"],
       imageUrl: json["imageUrl"],
-      price:  double.parse(json["price"])  ,
+      price: double.parse(json["price"]),
       quantity: RxInt(json["quantity"]),
     );
   }

@@ -17,9 +17,8 @@ class OrderController extends GetxController {
   RxList<Order> orders = <Order>[].obs;
 
   Future<void> httpFethOrders() async {
-    orders.value = await RealTimeDataBase()
-        .featchOrders(authResponse['idToken'], authResponse['localId']);
-    update();
+    var tmp = await RealTimeDataBase().featchOrders();
+    orders.value = tmp.reversed.toList();
   }
 
   var isLoading = false.obs;
@@ -33,6 +32,12 @@ class OrderController extends GetxController {
         .toList();
   }
 
+  // bool showDetalis = true;
+
+  void forceUpdate() {
+    update();
+  }
+
   @override
   void onInit() async {
     await Future.delayed(Duration.zero).then((_) => httpFethOrders());
@@ -40,8 +45,7 @@ class OrderController extends GetxController {
   }
 
   @override
-  void onReady()  {
-
+  void onReady() {
     // TODO: implement onReady
     super.onReady();
   }
@@ -52,13 +56,4 @@ class OrderController extends GetxController {
 
     super.onClose();
   }
-
-  /* bool showDetalis = true; */
-
-/*   void togleShowDetails(OrderProduct orderItem) {
-    orderItem.detailsShown = !orderItem.detailsShown;
-    update();
-    /* print(detailedShown); */
-  } */
-
 }

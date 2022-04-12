@@ -6,18 +6,17 @@ import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart
 import 'package:http/http.dart' as http;
 
 class RealTimeDataBase {
-  Future<List<Order>> featchOrders(String token, String id) async {
+  Future<List<Order>> featchOrders() async {
     final url = Uri.parse(
-        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth=$token');
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth=${authResponse['idToken']}');
 
     final dataBase = await http.get(url);
     final decodedData = json.decode(dataBase.body) as Map<String, dynamic>?;
 
     List<Order> decodedOrders = [];
-    int iterator = 1;
+
     if (decodedData != null) {
       decodedData.forEach((orderId, orderValue) {
-        var tmpOrderId = orderId.toString();
         var tmpOrder = Order.fromJson(orderValue);
         decodedOrders.add(tmpOrder);
       });
@@ -25,11 +24,13 @@ class RealTimeDataBase {
     return decodedOrders;
   }
 
-  Future<void> toggleIsFavoriteOpt(bool isFavorite, String id) async {
+  Future<void> putIsFavorite(
+    bool isFavorite,
+    String productId,
+  ) async {
     final url = Uri.parse(
-        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=${authResponse['idToken']}');
-    var response =
-        await http.patch(url, body: json.encode({'isFavorite': isFavorite}));
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/userFavorites/${authResponse['localId']}/$productId.json?auth=${authResponse['idToken']}');
+    var response = await http.put(url, body: json.encode(isFavorite));
 
     if (response.statusCode >= 400) {
       throw Error();
@@ -49,11 +50,17 @@ class RealTimeDataBase {
   }
 
   Future<List<Product>> featchProduct() async {
-    final url = Uri.parse(
+    var url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${authResponse['idToken']}');
     final dataBase = await http.get(url);
 
     final decodedData = json.decode(dataBase.body) as Map<String, dynamic>?;
+
+    url = Uri.parse(
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/userFavorites/${authResponse['localId']}.json?auth=${authResponse['idToken']}');
+
+    final jsonIsFavorite = await http.get(url);
+    final decodedIsFavorite = jsonDecode(jsonIsFavorite.body);
 
     List<Product> decodedProducts = [];
 
@@ -62,6 +69,7 @@ class RealTimeDataBase {
         final decodedId = prodId.toString();
         var tmpProduct = Product.fromJson(prodValue);
         tmpProduct.id = decodedId;
+        tmpProduct.isFavorite = decodedIsFavorite == null ? false : decodedIsFavorite[tmpProduct.id]??  false   ;
 
         decodedProducts.add(tmpProduct);
       });
@@ -91,7 +99,7 @@ class RealTimeDataBase {
       );
       return response;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 

@@ -58,57 +58,54 @@ class ProductSimpleTile extends GetView<HomeController> {
                   ),
                 )),
             footer: GridTileBar(
-              backgroundColor: Colors.black54,
-              leading: GetBuilder<HomeController>(
-                  init: HomeController(),
-                  builder: (controller) => IconButton(
-                        icon: Icon(Icons.favorite),
-                        color: product.isFavorite ? Colors.red : Colors.white,
-                        onPressed: () async {
-                          try {
-                            await product
-                                .toggleFavoriteFirebase(!product.isFavorite)
-                                .then((value) => controller.updateState());
-                          } catch (_) {
-                            Get.snackbar('Error', 'status change fail',
-                                duration: Duration(seconds: 1),
-                                shouldIconPulse: true,
-                                icon: Icon(Icons.warning));
-                          }
-                        },
-                      )),
-              title: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  product.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, fontFamily: ''),
+                backgroundColor: Colors.black54,
+                leading: GetBuilder<HomeController>(
+                    init: HomeController(),
+                    builder: (controller) => IconButton(
+                          icon: Icon(Icons.favorite),
+                          color: product.isFavorite ? Colors.red : Colors.white,
+                          onPressed: () async {
+                             product.isFavorite =  !product.isFavorite;
+                            try {
+                              await product
+                                  .toggleFavoriteFirebase()
+                                  .then((value) => controller.updateState());
+                            } catch (_) {
+                              Get.snackbar('Error', 'status change fail',
+                                  duration: Duration(seconds: 1),
+                                  shouldIconPulse: true,
+                                  icon: Icon(Icons.warning));
+                            }
+                          },
+                        )),
+                title: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    product.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontFamily: ''),
+                  ),
                 ),
-              ),
-              trailing:Obx(()=> IconButton(
-                        icon: Icon(Icons.shopping_cart),
-                        color: cartController.order.orderProducts
-                                .any((element) => element.id == product.id)
-                            ? Colors.green
-                            : Colors.white,
-                        onPressed: () {
-                          cartController.addCartItem(CartProduct(
-                              id: product.id!,
-                              itemName: product.title,
-                              imageUrl: product.imageUrl,
-                              price: product.price,
-                              quantity: 1.obs));
+                trailing: Obx(() => IconButton(
+                      icon: Icon(Icons.shopping_cart),
+                      color: cartController.order.orderProducts
+                              .any((element) => element.id == product.id)
+                          ? Colors.green
+                          : Colors.white,
+                      onPressed: () {
+                        cartController.addCartItem(CartProduct(
+                            id: product.id!,
+                            itemName: product.title,
+                            imageUrl: product.imageUrl,
+                            price: product.price,
+                            quantity: 1.obs));
 
-                          Get.snackbar(
-                              'Cart info', 'added a product to the cart',
-                              icon: Icon(Icons.add_shopping_cart),
-                              snackPosition: SnackPosition.BOTTOM,
-                              duration: Duration(seconds: 1));
-                        },
-                      ) )
-
-
-            ),
+                        Get.snackbar('Cart info', 'added a product to the cart',
+                            icon: Icon(Icons.add_shopping_cart),
+                            snackPosition: SnackPosition.BOTTOM,
+                            duration: Duration(seconds: 1));
+                      },
+                    ))),
           ),
         ),
       ),

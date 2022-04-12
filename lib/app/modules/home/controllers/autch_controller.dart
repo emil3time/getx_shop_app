@@ -106,7 +106,7 @@ class AutchController extends GetxController {
   }
 
   String refreshToken = '';
-  String? _userId;
+
 
   DateTime? _expiryTime;
 

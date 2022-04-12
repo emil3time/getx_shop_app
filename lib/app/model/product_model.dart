@@ -4,9 +4,6 @@ import 'dart:convert';
   import 'package:getx_shop_app/app/model/http_exeption_model.dart';
   import 'package:http/http.dart' as http; */
 
-import 'dart:convert';
-
-import 'package:get/get.dart';
 import 'package:getx_shop_app/app/infrastructure/fb_services/db/firebase.dart';
 
 Product productFromJson(String str) => Product.fromJson(json.decode(str));
@@ -35,7 +32,7 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         description: json["description"],
         imageUrl: json["imageUrl"],
-        isFavorite: json["isFavorite"],
+        // isFavorite: json["isFavorite"],
         price: double.parse(json["price"]),
         title: json["title"],
       );
@@ -43,15 +40,16 @@ class Product {
   Map<String, dynamic> toJson() => {
         "description": description,
         "imageUrl": imageUrl,
-        "isFavorite": isFavorite,
+        // "isFavorite": isFavorite,
         "price": price.toString(),
         "title": title,
       };
 
-  Future<void> toggleFavoriteFirebase(bool isFavorite) async {
-    await RealTimeDataBase()
-        .toggleIsFavoriteOpt(isFavorite, id ?? '')
-        .then((_) => isFavorite = isFavorite);
+  Future<void> toggleFavoriteFirebase() async {
+    await RealTimeDataBase().putIsFavorite(
+      isFavorite,
+      id ?? '',
+    );
   }
 }
 

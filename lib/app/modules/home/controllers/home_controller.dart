@@ -7,10 +7,11 @@ import '../../../infrastructure/fb_services/db/firebase.dart';
 
 class HomeController extends GetxController {
   RxList<Product> dummyList = <Product>[].obs;
+
+  
   //fetch product
   Future<void> httpFetchProduct() async {
-    dummyList.value = await RealTimeDataBase()
-        .featchProduct();
+    dummyList.value = await RealTimeDataBase().featchProduct();
   }
 
   // RxBool where use switches
@@ -18,13 +19,11 @@ class HomeController extends GetxController {
   // switch for favorite
   void switchTooFavorites() {
     showOnlyFavorite.value = true;
-
   }
 
   // switch for all
   void switchTooAll() {
     showOnlyFavorite.value = false;
-
   }
 
   void updateState() {
