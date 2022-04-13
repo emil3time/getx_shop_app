@@ -15,7 +15,7 @@ class ProductsGrid extends GetView<HomeController> {
       () => GridView.builder(
         itemCount: controller.showOnlyFavorite.value
             ? controller.onlyFavoriteList.length
-            : controller.dummyList.length,
+            : controller.allProducts.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             mainAxisExtent: 330,
             crossAxisCount: 2,
@@ -25,7 +25,7 @@ class ProductsGrid extends GetView<HomeController> {
         itemBuilder: (context, i) => ProductSimpleTile(
             product: controller.showOnlyFavorite.value
                 ? controller.onlyFavoriteList[i]
-                : controller.dummyList[i]
+                : controller.allProducts[i]
             ),
       ),
     );

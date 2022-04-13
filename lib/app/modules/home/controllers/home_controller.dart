@@ -6,12 +6,12 @@ import 'package:getx_shop_app/app/model/product_model.dart';
 import '../../../infrastructure/fb_services/db/firebase.dart';
 
 class HomeController extends GetxController {
-  RxList<Product> dummyList = <Product>[].obs;
+  RxList<Product> allProducts = <Product>[].obs;
 
-  
+
   //fetch product
-  Future<void> httpFetchProduct() async {
-    dummyList.value = await RealTimeDataBase().featchProduct();
+  Future<void> fetchAllProducts() async {
+    allProducts.value = await RealTimeDataBase().featchProduct();
   }
 
   // RxBool where use switches
@@ -32,7 +32,7 @@ class HomeController extends GetxController {
 
   // List of Products marked as favorite
   List<Product> get onlyFavoriteList {
-    return dummyList.where((e) => e.isFavorite).toList();
+    return allProducts.where((e) => e.isFavorite).toList();
   }
 
   // create get to chandle private class
@@ -45,19 +45,19 @@ class HomeController extends GetxController {
     if (showOnlyFavorite.value) {
       return [...onlyFavoriteList];
     } else {
-      return [...dummyList];
+      return [...allProducts];
     }
   }
 
 // firstWhere list method return first element where condition == true
 //
   Product findSingleProductById(String id) {
-    return dummyList.firstWhere((e) => e.id == id);
+    return allProducts.firstWhere((e) => e.id == id);
   }
 
   @override
   void onInit() async {
-    await httpFetchProduct();
+    await fetchAllProducts();
     super.onInit();
   }
 

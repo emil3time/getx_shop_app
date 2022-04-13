@@ -5,6 +5,7 @@ import 'dart:convert';
   import 'package:http/http.dart' as http; */
 
 import 'package:getx_shop_app/app/infrastructure/fb_services/db/firebase.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
 
 Product productFromJson(String str) => Product.fromJson(json.decode(str));
 
@@ -19,6 +20,7 @@ class Product {
     required this.title,
     this.id,
     this.isInCart = false,
+    required this.ownerId
   });
 
   String description;
@@ -28,6 +30,7 @@ class Product {
   String title;
   String? id;
   bool isInCart;
+  String ownerId;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         description: json["description"],
@@ -35,6 +38,7 @@ class Product {
         // isFavorite: json["isFavorite"],
         price: double.parse(json["price"]),
         title: json["title"],
+        ownerId: json["ownerId"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +47,7 @@ class Product {
         // "isFavorite": isFavorite,
         "price": price.toString(),
         "title": title,
+        "ownerId": ownerId
       };
 
   Future<void> toggleFavoriteFirebase() async {

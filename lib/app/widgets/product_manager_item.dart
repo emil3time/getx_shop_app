@@ -12,7 +12,7 @@ class ProductManagerItem extends GetView<ManagerController> {
     required this.productData,
   });
 
-  final homeController = Get.find<HomeController>();
+  // final homeController = Get.find<HomeController>();
 
   final Product productData;
 

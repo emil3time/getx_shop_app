@@ -8,6 +8,7 @@ import 'app/bindings/controller_bindings.dart';
 import 'app/modules/home/views/auth_screen.dart';
 import 'app/routes/app_pages.dart';
 
+
 void main() {
   final authController = Get.put(AutchController());
 

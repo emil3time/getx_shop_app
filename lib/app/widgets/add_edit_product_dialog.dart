@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
 
 import '../model/product_model.dart';
 
@@ -9,6 +10,8 @@ import 'custom_input_decoration.dart';
 class AddEditProductDialog extends GetView<ManagerController> {
   AddEditProductDialog({required this.existingProduct});
   final Product existingProduct;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +46,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                               },
                               onSaved: (newValue) {
                                 existingProduct.title = newValue!;
+
                               },
                               decoration: customInputDecoration('title'),
                               textInputAction: TextInputAction.next,
@@ -137,8 +141,6 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                       if (!value.endsWith('jpg') &&
                                           !value.endsWith('png') &&
                                           !value.endsWith('jpeg')) {
-
-
                                         return 'Please enter a valid URL2';
                                       }
 
@@ -173,7 +175,6 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                     onPressed: () {
                                       controller.clearInitialValue();
                                       Get.back();
-
                                     },
                                     icon: Icon(
                                       Icons.skip_previous,
@@ -183,6 +184,7 @@ class AddEditProductDialog extends GetView<ManagerController> {
                                 IconButton(
                                     padding: EdgeInsets.only(right: 35),
                                     onPressed: () {
+                                      existingProduct.ownerId = authResponse['localId'];
                                       controller.newProduct = existingProduct;
                                       controller.updateProduct();
                                     },

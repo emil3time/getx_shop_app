@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/infrastructure/fb_services/db/firebase.dart';
 import 'package:getx_shop_app/app/model/http_exeption_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
+
 import 'dart:convert';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import '../../../model/product_model.dart';
 
 class ManagerController extends GetxController {
+  List<Product>  onlyOwnerProducts = [];
+
   var db = RealTimeDataBase();
   var homeController = Get.put(HomeController());
 
@@ -34,19 +37,31 @@ class ManagerController extends GetxController {
     update();
   }
 
+  List<Product> showOnlyOwnerProducts() {
+    homeController.allProducts.forEach((element) {
+      if (element.ownerId == authResponse['localId']) {
+        onlyOwnerProducts.add(element);
+      }
+    });
+    return onlyOwnerProducts;
+  }
+
   Future<dynamic> postProduct() async {
     var response = db.postProduct(newProduct);
     return response;
   }
 
-  // update product on database
+  fetchOnlyOwnerProducts() async {
+    onlyOwnerProducts = await db.featchProduct(true);
+  }
+
   var newProduct = Product(
-    description: '',
-    id: '',
-    title: '',
-    imageUrl: '',
-    price: 0.0,
-  );
+      description: '',
+      id: '',
+      title: '',
+      imageUrl: '',
+      price: 0.0,
+      ownerId: '');
 
   Future<dynamic> updateProduct() async {
     if (!formKey.currentState!.validate()) {
@@ -58,26 +73,28 @@ class ManagerController extends GetxController {
     toogleIsLoading();
 
     try {
-      if (homeController.dummyList
+      if (homeController.allProducts
           .any((element) => element.id == newProduct.id)) {
-        await db.updateProduct(newProduct).then((_) {
-          var indexUpdatedProduct = homeController.dummyList
+        return await db.updateProduct(newProduct).then((_) {
+          var indexUpdatedProduct = homeController.allProducts
               .indexWhere((element) => element.id == newProduct.id);
-          homeController.dummyList[indexUpdatedProduct] = newProduct;
+          homeController.allProducts[indexUpdatedProduct] = newProduct;
         });
       } else {
-        await db.postProduct(newProduct).then((jsonResponse) {
+        return await db.postProduct(newProduct).then((jsonResponse) {
           var response = jsonDecode(jsonResponse.body);
 
           newProduct.id = response['name'];
-          homeController.dummyList.add(newProduct);
+
+          homeController.allProducts.add(newProduct);
         });
       }
     } catch (error) {
-      print('catch error upda controller');
+      // print('ID TOKEN ${authResponse['idToken']}');
+      // print('catch error upda controller');
       toogleIsLoading();
       showCustomErrorDialog();
-      /* toogleIsLoading(); */
+      toogleIsLoading();
     } finally {
       toogleIsLoading();
       clearInitialValue();
@@ -87,8 +104,13 @@ class ManagerController extends GetxController {
   }
 
   clearInitialValue() {
-    newProduct =
-        Product(description: '', id: '', title: '', imageUrl: '', price: 0.0);
+    newProduct = Product(
+        description: '',
+        id: '',
+        title: '',
+        imageUrl: '',
+        price: 0.0,
+        ownerId: '');
     imageUrlController.text = '';
   }
 
@@ -103,11 +125,6 @@ class ManagerController extends GetxController {
   Future<void> httpUpdate() async {
     db.updateProduct(newProduct);
   }
-
-  // editProduct(Product productData) {
-  //   newProduct = productData;
-  //   imageUrlController.text = newProduct.imageUrl;
-  // }
 
   // Progress Indicator
   var isLoading = false.obs;
@@ -137,18 +154,17 @@ class ManagerController extends GetxController {
 
   Future<void> deleteProductOptimistic(String id) async {
     final selectedProductIndex =
-        homeController.dummyList.indexWhere((element) => element.id == id);
+        homeController.allProducts.indexWhere((element) => element.id == id);
 
-    var selectedProduct = homeController.dummyList[selectedProductIndex];
+    var selectedProduct = homeController.allProducts[selectedProductIndex];
     final jsonResponse = await db.deleteProduct(id);
-    homeController.dummyList.remove(selectedProduct);
+    homeController.allProducts.remove(selectedProduct);
 
     if (jsonResponse.statusCode >= 400) {
-      homeController.dummyList.insert(selectedProductIndex, selectedProduct);
+      homeController.allProducts.insert(selectedProductIndex, selectedProduct);
 
       throw HttpExeption(message: 'delete fail  ');
     }
-   
   }
 
   /*  deleteProduct(String id) {
@@ -162,7 +178,7 @@ class ManagerController extends GetxController {
   @override
   void onInit() async {
     urlFocusNode.addListener(updateImage);
-    // TODO: implement onInit
+    // fetchOnlyOwnerProducts();
     super.onInit();
   }
 

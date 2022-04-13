@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:getx_shop_app/app/model/product_model.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/manager_controller.dart';
 import 'package:getx_shop_app/app/widgets/product_manager_item.dart';
@@ -26,7 +24,10 @@ class ProductManagerScreenView extends StatelessWidget {
           IconButton(
             onPressed: () {
               Get.defaultDialog(
-                  title: 'Add new product', content: AddEditProductDialog(existingProduct: controller.newProduct,));
+                  title: 'Add new product',
+                  content: AddEditProductDialog(
+                    existingProduct: controller.newProduct,
+                  ));
             },
             icon: Icon(
               Icons.add,
@@ -36,16 +37,16 @@ class ProductManagerScreenView extends StatelessWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => homeController.httpFetchProduct(),
+        onRefresh: () => controller.fetchOnlyOwnerProducts(),
         child: Padding(
           padding: EdgeInsets.all(8),
           child: Container(
             height: double.infinity,
             width: double.infinity,
             child: Obx(() => ListView.builder(
-                  itemCount: homeController.dummyList.length,
+                  itemCount: controller.showOnlyOwnerProducts().length,
                   itemBuilder: (_, i) => ProductManagerItem(
-                    productData: homeController.dummyList[i],
+                    productData: controller.showOnlyOwnerProducts()[i],
                   ),
                 )),
           ),
