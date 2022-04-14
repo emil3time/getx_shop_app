@@ -38,14 +38,17 @@ class ProductManagerScreenView extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () => controller.fetchOnlyOwnerProducts(),
+        
         child: Padding(
           padding: EdgeInsets.all(8),
           child: Container(
             height: double.infinity,
             width: double.infinity,
             child: Obx(() => ListView.builder(
+
                   itemCount: controller.showOnlyOwnerProducts().length,
                   itemBuilder: (_, i) => ProductManagerItem(
+
                     productData: controller.showOnlyOwnerProducts()[i],
                   ),
                 )),

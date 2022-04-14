@@ -10,7 +10,7 @@ class RealTimeDataBase {
     Order order,
   ) async {
     final url = Uri.parse(
-        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth=${authResponse['idToken']}');
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/orders/${authResponse['localId']}.json?auth=${authResponse['idToken']}');
     final response = await http.post(
       url,
       body: orderToJson(order),
@@ -20,7 +20,7 @@ class RealTimeDataBase {
 
   Future<List<Order>> featchOrders() async {
     final url = Uri.parse(
-        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth=${authResponse['idToken']}');
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/orders/${authResponse['localId']}.json?auth=${authResponse['idToken']}');
 
     final dataBase = await http.get(url);
     final decodedData = json.decode(dataBase.body) as Map<String, dynamic>?;
@@ -52,9 +52,9 @@ class RealTimeDataBase {
   }
 
   Future<List<Product>> featchProduct([bool filterByOwner = false]) async {
-    final filterUrl = filterByOwner ? '&orderBy="ownerId"&equalTo="${authResponse['localId']}"' : '';
+    final filterUrl = filterByOwner ? 'orderBy="ownerId"&equalTo="${authResponse['localId']}"' : '';
     var url = Uri.parse(
-        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${authResponse['idToken']}$filterUrl');
+        'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${authResponse['idToken']}&$filterUrl');
     final dataBase = await http.get(url);
 
     final decodedData = json.decode(dataBase.body) as Map<String, dynamic>?;

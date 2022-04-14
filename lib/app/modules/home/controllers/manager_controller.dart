@@ -10,7 +10,7 @@ import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart'
 import '../../../model/product_model.dart';
 
 class ManagerController extends GetxController {
-  List<Product>  onlyOwnerProducts = [];
+  List<Product> onlyOwnerProducts = [];
 
   var db = RealTimeDataBase();
   var homeController = Get.put(HomeController());
@@ -38,11 +38,13 @@ class ManagerController extends GetxController {
   }
 
   List<Product> showOnlyOwnerProducts() {
-    homeController.allProducts.forEach((element) {
+    List<Product> tmpProducts = [];
+    for (var element in homeController.allProducts) {
       if (element.ownerId == authResponse['localId']) {
-        onlyOwnerProducts.add(element);
+        tmpProducts.add(element);
       }
-    });
+      onlyOwnerProducts = tmpProducts;
+    }
     return onlyOwnerProducts;
   }
 
