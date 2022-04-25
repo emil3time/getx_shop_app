@@ -12,8 +12,8 @@ import '../controllers/home_controller.dart';
 enum FilterSwitch { all, favorite }
 
 class HomeScreenView extends GetView<HomeController> {
-  final cartController = Get.put<CartController>(CartController());
-  // final controller = Get.put(HomeController());
+  final cartController = Get.put(CartController());
+  final controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {

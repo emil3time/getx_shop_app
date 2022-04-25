@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import 'package:getx_shop_app/app/modules/home/views/order_screen_view.dart';
 import 'package:getx_shop_app/app/modules/home/views/product_manager_screen_view.dart';
@@ -7,6 +8,7 @@ import 'package:getx_shop_app/app/modules/home/views/product_manager_screen_view
 import 'drawer_widgets.dart';
 
 class AppBarDrawer extends GetView<HomeController> {
+  var authController = Get.find<AutchController>();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -25,20 +27,26 @@ class AppBarDrawer extends GetView<HomeController> {
               height: 30,
             ),
             DrawerItem(
-              icon: Icons.shop_two_outlined,
+              icon: Icons.shop_two_rounded,
               title: 'Continue shoping',
               goTo: () => Get.back(),
             ),
             DrawerDivider(),
-            DrawerItem(icon: Icons.send_outlined,
+            DrawerItem(icon: Icons.send_rounded,
               title: 'Orders',
               goTo: () => Get.to(OrderScreenView()),
             ),
             DrawerDivider(),
             DrawerItem(
-              icon: Icons.manage_accounts_outlined,
+              icon: Icons.manage_accounts_rounded,
               title: 'Product manager',
               goTo: () => Get.to(ProductManagerScreenView()),
+            ),
+            DrawerDivider(),
+             DrawerItem(
+              icon: Icons.logout_rounded,
+              title: 'Logout',
+              goTo: () => authController.logout(),
             ),
             DrawerDivider(),
           ],

@@ -39,8 +39,8 @@ class RealTimeDataBase {
   Future<http.Response> postProduct(Product product) async {
     final url = Uri.parse(
         'https://fluttermedia-5f19e-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${authResponse['idToken']}');
-    print(productToJson(product));
-    /* print('id: ${product.ownerId}'); */
+    // print(productToJson(product));
+
 
     final response = await http
         .post(url, body: productToJson(product))

@@ -118,7 +118,7 @@ class CartController extends GetxController {
     } else {
       order.orderProducts.add(cartProduct);
     }
-    // print(order.length);
+   
 
     _cartCounter++;
     update();

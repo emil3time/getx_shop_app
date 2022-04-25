@@ -92,8 +92,7 @@ class ManagerController extends GetxController {
         });
       }
     } catch (error) {
-      // print('ID TOKEN ${authResponse['idToken']}');
-      // print('catch error upda controller');
+    
       toogleIsLoading();
       showCustomErrorDialog();
       toogleIsLoading();
