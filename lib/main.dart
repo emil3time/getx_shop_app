@@ -13,14 +13,14 @@ import 'app/routes/app_pages.dart';
 void main()async {
   await GetStorage.init();
   final authController = Get.put(AutchController());
-  final globalcontroller = Get.put(GlobalController());
+
 
 
 
   runApp(
     Obx(
       ()=> GetMaterialApp(
-        initialBinding: ControllerBinding(),
+        // initialBinding: ControllerBinding(),
         title: "Application",
         home:  authController.isAutch.value ? HomeScreenView() : AuthScreen(),
         getPages: AppPages.routes,

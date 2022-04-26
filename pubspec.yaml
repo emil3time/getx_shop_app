@@ -21,6 +21,8 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  assets:
+    - assets/images/placeholder.png
   fonts:
     - family: Comfortaa
       fonts:
@@ -31,4 +33,6 @@ flutter:
         - asset: assets\Shizuru-Regular.ttf
 
   uses-material-design: true
+
+
 

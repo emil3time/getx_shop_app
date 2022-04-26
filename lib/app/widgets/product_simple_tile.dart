@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_shop_app/app/model/order_model.dart';
-import 'package:getx_shop_app/app/modules/home/controllers/autch_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/cart_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/home_controller.dart';
 import 'package:getx_shop_app/app/modules/home/controllers/manager_controller.dart';
@@ -42,9 +41,15 @@ class ProductSimpleTile extends GetView<HomeController> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: GridTile(
-            child: Image.network(
-              product.imageUrl,
-              fit: BoxFit.cover,
+            child: Hero(
+              tag: product.imageUrl,
+              child: FadeInImage(
+                fadeInCurve: Curves.slowMiddle,
+                fadeInDuration: Duration(seconds: 1),
+                placeholder: AssetImage('assets/images/placeholder.png'),
+                image: NetworkImage(product.imageUrl),
+                fit: BoxFit.cover,
+              ),
             ),
             header: Container(
                 padding: EdgeInsets.all(5),
@@ -65,7 +70,7 @@ class ProductSimpleTile extends GetView<HomeController> {
                           icon: Icon(Icons.favorite),
                           color: product.isFavorite ? Colors.red : Colors.white,
                           onPressed: () async {
-                             product.isFavorite =  !product.isFavorite;
+                            product.isFavorite = !product.isFavorite;
                             try {
                               await product
                                   .toggleFavoriteFirebase()

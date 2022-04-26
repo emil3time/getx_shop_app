@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
-import 'package:getx_shop_app/app/controllers/global_controller.dart';
-import 'autch_controller.dart';
+
+
 
 import 'package:getx_shop_app/app/model/product_model.dart';
 
 import '../../../infrastructure/fb_services/db/firebase.dart';
 
 class HomeController extends GetxController {
-  var globalController = Get.find<GlobalController>();
+
 
   RxList<Product> allProducts = <Product>[].obs;
 

@@ -12,58 +12,62 @@ class ProductScreenWiev extends GetView<HomeController> {
     // if I use stateless widget without binding first must find controler like below
     // Product singleProduct =
     //     Get.find<HomeController>().findSingleProductById(id);
-    Product singleProduct = controller.findSingleProductById(id);
-    String title = singleProduct.title;
+    Product product = controller.findSingleProductById(id);
+
     return Scaffold(
-        appBar: AppBar(
-          title: Text(id),
-        ),
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(product.title),
+              background: Hero(
+                tag: product.imageUrl,
+                child: Image.network(
+                  product.imageUrl,
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            SizedBox(
+              height:50,
+            ),
+            Wrap(
+              direction: Axis.vertical,
               children: [
-                SizedBox(
-                  height: 300,
-                  width: 220,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Image.network(
-                      singleProduct.imageUrl,
-                    ),
+                Text(
+                  product.title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Comfortaa',
                   ),
                 ),
                 SizedBox(
-                  width: 20,
+                  height: 10,
                 ),
-                Wrap(
-                  direction: Axis.vertical,
-                  children: [
-                    Text(
-                      singleProduct.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Comfortaa',
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      singleProduct.price.toString(),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Comfortaa',
-                      ),
-                    ),
-                  ],
+                Text(
+                  product.price.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Comfortaa',
+                  ),
                 ),
               ],
             ),
             Expanded(
-              child: Text(singleProduct.description),
+              child: Text(product.description),
             ),
-          ],
-        ));
+            SizedBox(
+              height: 700,
+            ),
+            Text('naskjhdjkashdjksajkdjkasbdjhkasbjhkdbhj')
+          ]))
+        ],
+      ),
+    );
   }
 }

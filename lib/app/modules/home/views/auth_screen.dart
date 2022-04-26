@@ -1,13 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getx_shop_app/app/controllers/global_controller.dart';
 
 import '../../../../app/modules/home/controllers/autch_controller.dart';
 
 class AuthScreen extends StatelessWidget {
   final autchController = Get.put(AutchController());
-  
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +95,9 @@ class AuthCard extends StatelessWidget {
         ),
         elevation: 8.0,
         child: Obx(
-          () => Container(
+          () => AnimatedContainer(
+            duration: Duration(milliseconds: 700),
+            curve: Curves.fastOutSlowIn,
             height:
                 autchController.authMode.value == AuthMode.signup ? 320 : 260,
             constraints: BoxConstraints(
@@ -132,28 +132,49 @@ class AuthCard extends StatelessWidget {
                         if (value!.isEmpty || value.length < 5) {
                           return 'Password is too short!';
                         }
+                        return null;
                       },
                       onSaved: (value) {
                         autchController.authData['password'] = value!;
                       },
                     ),
-                    if (autchController.authMode.value == AuthMode.signup)
-                      TextFormField(
-                        enabled:
-                            autchController.authMode.value == AuthMode.signup,
-                        decoration:
-                            InputDecoration(labelText: 'Confirm Password'),
-                        obscureText: true,
-                        validator: autchController.authMode.value ==
-                                AuthMode.signup
-                            ? (value) {
-                                if (value !=
-                                    autchController.passwordController.text) {
-                                  return 'Passwords do not match!';
-                                }
-                              }
-                            : null,
+                    // if (autchController.authMode.value == AuthMode.signup)
+                    AnimatedContainer(
+                      constraints: BoxConstraints(
+                          minHeight:
+                              autchController.authMode.value == AuthMode.signup
+                                  ? 60
+                                  : 0,
+                          maxHeight:
+                              autchController.authMode.value == AuthMode.signup
+                                  ? 120
+                                  : 0),
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeIn,
+                      child: FadeTransition(
+                        opacity: autchController.opacityAnimation!,
+                        child: SlideTransition(
+                          position:autchController.slideAnimation! ,
+                          child: TextFormField(
+                            enabled:
+                                autchController.authMode.value == AuthMode.signup,
+                            decoration:
+                                InputDecoration(labelText: 'Confirm Password'),
+                            obscureText: true,
+                            validator: autchController.authMode.value ==
+                                    AuthMode.signup
+                                ? (value) {
+                                    if (value !=
+                                        autchController.passwordController.text) {
+                                      return 'Passwords do not match!';
+                                    }
+                                    return null;
+                                  }
+                                : null,
+                          ),
+                        ),
                       ),
+                    ),
                     SizedBox(
                       height: 20,
                     ),

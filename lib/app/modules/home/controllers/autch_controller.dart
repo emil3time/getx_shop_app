@@ -14,7 +14,11 @@ enum AuthMode { signup, login }
 Map<String, dynamic> authResponse = {};
 GetStorage? box;
 
-class AutchController extends GetxController {
+class AutchController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  AnimationController? animationController;
+  Animation<Offset>? slideAnimation;
+  Animation<double>? opacityAnimation;
   var auth = Auth();
   Timer? _existingTimer;
 
@@ -110,9 +114,11 @@ class AutchController extends GetxController {
 
   void switchAuthMode() {
     if (authMode.value == AuthMode.login) {
+      animationController!.forward();
       authMode.value = AuthMode.signup;
     } else {
       authMode.value = AuthMode.login;
+      animationController!.reverse();
     }
   }
 
@@ -161,7 +167,8 @@ class AutchController extends GetxController {
     var accessExpiryDate =
         DateTime.now().add(Duration(seconds: int.parse(expiresIn)));
     var credentialsToString = jsonEncode({
-      'expiresIn': accessExpiryDate.toIso8601String(),
+      'accessExpiryDate': accessExpiryDate.toIso8601String(),
+      'expiresIn': authResponse['expiresIn'],
       'idToken': authResponse['idToken'],
       'localId': authResponse['localId']
     });
@@ -178,26 +185,33 @@ class AutchController extends GetxController {
     }
     var decodedCredentials =
         jsonDecode(credentials) /* as Map<String, dynamic> */;
-    final expiryDate = DateTime.parse(decodedCredentials['expiresIn']);
-    if (expiryDate.isBefore(DateTime.now())) {
+    final accessExpiryDate =
+        DateTime.parse(decodedCredentials['accessExpiryDate']);
+    if (accessExpiryDate.isBefore(DateTime.now())) {
       return false;
     }
     authResponse['idToken'] = decodedCredentials['idToken'];
     authResponse['localId'] = decodedCredentials['localId'];
+    authResponse['expiresIn'] = decodedCredentials['expiresIn'];
     _timerLogout();
 
     return true;
-  }
-
-  updateIsAuth() {
-    isAutch;
-    update();
   }
 
   @override
   void onInit() async {
     box = GetStorage();
     await _tryToLogin(box!);
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    slideAnimation = Tween<Offset>(begin: Offset(0, -1.5), end: Offset(0, 0))
+        .animate(CurvedAnimation(
+            parent: animationController!, curve: Curves.fastOutSlowIn));
+    opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: animationController!, curve: Curves.easeIn));
 
     super.onInit();
   }

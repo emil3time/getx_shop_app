@@ -12,51 +12,58 @@ class OrderCard extends GetView<OrderController> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 7,
-      color: Colors.white,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(
-              orderItem.amount.toStringAsFixed(2),
-            ),
-            subtitle: Text(
-              DateFormat.yMMMMEEEEd().format(orderItem.dataTime),
-            ),
-            trailing: GetBuilder<OrderController>(
-              builder: (ordController) {
-                return IconButton(
-                  onPressed: () {
-                    orderItem.showOrderDetails = !orderItem.showOrderDetails;
-                    controller.forceUpdate();
-                  },
-                  icon: orderItem.showOrderDetails
-                      ? Icon(
-                          Icons.expand_less,
-                        )
-                      : Icon(
-                          Icons.expand_more,
-                        ),
-                );
-              },
-            ),
-          ),
-          orderItem.showOrderDetails
-              ? Container(
-                  color: Colors.white,
-                  height: min(orderItem.orderProducts.length * 20 + 12, 100),
-                  width: double.infinity,
-                  child: ListView.builder(
-                    itemCount: orderItem.orderProducts.length,
-                    itemBuilder: (context, i) {
-                      return OrderCardDetails(
-                        orderDetails: orderItem.orderProducts[i],
-                      );
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 400),
+      height: orderItem.showOrderDetails
+          ? min(orderItem.orderProducts.length * 25 + 120, 400)
+          : 85,
+      child: Card(
+        elevation: 7,
+        color: Colors.white,
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                orderItem.amount.toStringAsFixed(2),
+              ),
+              subtitle: Text(
+                DateFormat.yMMMMEEEEd().format(orderItem.dataTime),
+              ),
+              trailing: GetBuilder<OrderController>(
+                builder: (ordController) {
+                  return IconButton(
+                    onPressed: () {
+                      orderItem.showOrderDetails = !orderItem.showOrderDetails;
+                      controller.forceUpdate();
                     },
-                  ))
-              : SizedBox()
-        ],
+                    icon: orderItem.showOrderDetails
+                        ? Icon(
+                            Icons.expand_less,
+                          )
+                        : Icon(
+                            Icons.expand_more,
+                          ),
+                  );
+                },
+              ),
+            ),
+            AnimatedContainer(
+                duration: Duration(milliseconds: 400),
+                color: Colors.white,
+                height: orderItem.showOrderDetails
+                    ? min(orderItem.orderProducts.length * 35 + 10, 125)
+                    : 0,
+                width: double.infinity,
+                child: ListView.builder(
+                  itemCount: orderItem.orderProducts.length,
+                  itemBuilder: (context, i) {
+                    return OrderCardDetails(
+                      orderDetails: orderItem.orderProducts[i],
+                    );
+                  },
+                ))
+          ],
+        ),
       ),
     );
   }
